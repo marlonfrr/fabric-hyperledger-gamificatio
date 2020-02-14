@@ -1,10 +1,39 @@
 #!/bin/bash -x
 
-stopN0(){
-  cd ./net0/test-network
-  rm -Rf organizations/peerOrganizations && rm -Rf organizations/ordererOrganizations
-  ./network.sh down
-  cd -
+main() {
+  #Parse flags
+  NETWORK=0
+  while [[ $# -ge 1 ]]; do
+    k="$1"
+    case $k in
+      -n )
+        NETWORK=$2
+        shift
+        ;;
+      * )
+        exit
+        ;;
+    esac
+    shift
+  done
+
+  echo $NETWORK
+
+  if [[ "$NETWORK" -eq 2 ]]; then
+    stopN2
+  elif [[ "$NETWORK" -eq 1 ]]; then
+    stopN1
+  else
+    stopN0
+  fi
+
+  return 0
+  #Stop containers
+  # docker rm -f $(docker ps -aq)
+
+  #Remove images
+  # docker rmi -f $(docker images | grep papercontract | awk '{print $3}')
+  # docker rmi -f $(docker images | grep dev- | awk '{print $3}')
 
   #===========================
   #If user error
@@ -22,7 +51,20 @@ stopN0(){
   # rm -rf ./*
   # cd -
   #===========================
+}
 
+stopN0(){
+  cd ./net0/test-network
+  rm -Rf organizations/peerOrganizations && rm -Rf organizations/ordererOrganizations
+  ./network.sh down
+  cd -
+}
+
+stopN1(){
+  cd ./net2/test-network
+  rm -Rf organizations/peerOrganizations && rm -Rf organizations/ordererOrganizations
+  ./network.sh down
+  cd -
 }
 
 stopN2(){
@@ -32,35 +74,4 @@ stopN2(){
   cd -
 }
 
-
-#Parse flags
-
-NETWORK=0
-while [[ $# -ge 1 ]]; do
-  k="$1"
-  case $k in
-    -n )
-      NETWORK=$2
-      shift
-      ;;
-    * )
-      exit
-      ;;
-  esac
-  shift
-done
-
-echo $NETWORK
-
-if [[ "$NETWORK" -eq 2 ]]; then
-  stopN2
-else
-  stopN0
-fi
-
-#Stop containers
-# docker rm -f $(docker ps -aq)
-
-#Remove images
-# docker rmi -f $(docker images | grep papercontract | awk '{print $3}')
-# docker rmi -f $(docker images | grep dev- | awk '{print $3}')
+main "$@"

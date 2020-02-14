@@ -1,274 +1,53 @@
-#!/bin/bash
 
-main() {
-  #Parse flags
+CHANNEL_NAME="$1"
+CC_RUNTIME_LANGUAGE="$2"
+VERSION="$3"
+DELAY="$4"
+MAX_RETRY="$5"
+VERBOSE="$6"
+: ${CHANNEL_NAME:="mychannel"}
+: ${CC_RUNTIME_LANGUAGE:="golang"}
+: ${VERSION:="1"}
+: ${DELAY:="3"}
+: ${MAX_RETRY:="5"}
+: ${VERBOSE:="false"}
+CC_RUNTIME_LANGUAGE=`echo "$CC_RUNTIME_LANGUAGE" | tr [:upper:] [:lower:]`
+
+FABRIC_CFG_PATH=$PWD/../config/
+
+if [ "$CC_RUNTIME_LANGUAGE" = "go" -o "$CC_RUNTIME_LANGUAGE" = "golang" ] ; then
+	CC_RUNTIME_LANGUAGE=golang
+	CC_SRC_PATH="../chaincode/fabcar/go/"
+
+	echo Vendoring Go dependencies ...
+	pushd ../chaincode/fabcar/go
+	GO111MODULE=on go mod vendor
+	popd
+	echo Finished vendoring Go dependencies
+
+elif [ "$CC_RUNTIME_LANGUAGE" = "javascript" ]; then
+	CC_RUNTIME_LANGUAGE=node # chaincode runtime language is node.js
+	CC_SRC_PATH="../chaincode/fabcar/javascript/"
+
+elif [ "$CC_RUNTIME_LANGUAGE" = "java" ]; then
+	CC_RUNTIME_LANGUAGE=java
+	CC_SRC_PATH="../chaincode/fabcar/java/build/install/fabcar"
+
+	echo Compiling Java code ...
+	pushd ../chaincode/fabcar/java
+	./gradlew installDist
+	popd
+	echo Finished compiling Java code
+
+else
+	echo The chaincode language ${CC_RUNTIME_LANGUAGE} is not supported by this script
+	echo Supported chaincode languages are: go, javascript, java
+	exit 1
+fi
+
+# import utils
+. scripts/envVar.sh
 
-  NETWORK=0
-  while [[ $# -ge 1 ]]; do
-    k="$1"
-    case $k in
-      -n )
-        NETWORK=$2
-        shift
-        ;;
-      * )
-        exit
-        ;;
-    esac
-    shift
-  done
-
-  echo $NETWORK
-
-  if [[ "$NETWORK" -eq 2 ]]; then
-    deployN2
-  elif [[ "$NETWORK" -eq 1 ]]; then
-    deployN1
-  else
-    deployN0
-  fi
-}
-
-deployN0() {
-
-  #Sync smartcontract code
-  rsync --verbose -a -z --delete ./contract/ ../network/net0/chaincode/fabcar/javascript
-
-  cd ../network/net0/test-network
-  # ./network.sh deployCC -l
-
-  export FABRIC_CFG_PATH=${PWD}/configtx
-
-  CHANNEL_NAME="mychannel"
-  VERSION=2
-  CLI_DELAY=3
-  MAX_RETRY=5
-  VERBOSE=false
-  FABRIC_CFG_PATH=$PWD/../config/
-  CC_RUNTIME_LANGUAGE=node # chaincode runtime language is node.js
-  CC_SRC_PATH="../chaincode/fabcar/javascript/"
-
-  # import utils
-  . scripts/envVar.sh
-
-  LAST_VERSION=$(queryVersion 1)
-  if [[ -z "$LAST_VERSION" ]]; then
-    echo "Install First Time"
-    VERSION=1
-  else
-    VERSION=$(( $LAST_VERSION + 1 ))
-  fi
-  echo $VERSION
-
-  ## at first we package the chaincode
-  packageChaincode 1
-
-  ## Install chaincode on peer0.org1 and peer0.org2
-  echo "Installing chaincode on peer0.org1..."
-  installChaincode 1
-
-  ## query whether the chaincode is installed
-  queryInstalled 1
-
-  ## approve the definition for org1
-  approveForMyOrg 1
-
-  ## check whether the chaincode definition is ready to be committed
-  ## expect org1 to have approved and org2 not to
-  checkCommitReadiness 1 "\"Org1MSP\": true"
-
-  ## check whether the chaincode definition is ready to be committed
-  ## expect them both to have approved
-  checkCommitReadiness 1 "\"Org1MSP\": true"
-
-  ## now that we know for sure both orgs have approved, commit the definition
-  commitChaincodeDefinition 1
-
-  ## query on both orgs to see that the definition committed successfully
-  queryCommitted 1
-
-  ## Invoke the chaincode
-  # chaincodeInvokeInit 1
-
-  # sleep 10
-
-  ## Invoke the chaincode
-  # chaincodeInvoke 1
-
-  # Query chaincode on peer0.org1
-  # echo "Querying chaincode on peer0.org1..."
-  # chaincodeQuery 1
-
-  echo '==========================='
-  echo 'RUN: '
-  echo '==========================='
-  echo "CORE_CHAINCODE_ID_NAME=$(queryPackageID 1) CORE_PEER_TLS_ENABLED=false node ./contract/index.js --peer.address 127.0.0.1:7052"
-
-  cd -
-
-}
-
-deployN1() {
-  #Sync smartcontract code
-  rsync --verbose -a -z --delete ./contract/ ../network/net1/chaincode/fabcar/javascript
-
-  cd ../network/net1/test-network
-  # ./network.sh deployCC -l
-
-  export FABRIC_CFG_PATH=${PWD}/configtx
-
-  CHANNEL_NAME="mychannel"
-  VERSION=2
-  CLI_DELAY=3
-  MAX_RETRY=5
-  VERBOSE=false
-  FABRIC_CFG_PATH=$PWD/../config/
-  CC_RUNTIME_LANGUAGE=node # chaincode runtime language is node.js
-  CC_SRC_PATH="../chaincode/fabcar/javascript/"
-
-  # import utils
-  . scripts/envVar.sh
-
-  LAST_VERSION=$(queryVersion 1)
-  if [[ -z "$LAST_VERSION" ]]; then
-    echo "Install First Time"
-    VERSION=1
-  else
-    VERSION=$(( $LAST_VERSION + 1 ))
-  fi
-  echo $VERSION
-
-  ## at first we package the chaincode
-  packageChaincode 1
-
-  ## Install chaincode on peer0.org1 and peer0.org2
-  echo "Installing chaincode on peer0.org1..."
-  installChaincode 1
-  echo "Install chaincode on peer0.org2..."
-  installChaincode 2
-
-  ## query whether the chaincode is installed
-  queryInstalled 1
-
-  ## approve the definition for org1
-  approveForMyOrg 1
-
-  ## check whether the chaincode definition is ready to be committed
-  ## expect org1 to have approved and org2 not to
-  checkCommitReadiness 1 "\"Org1MSP\": true" "\"Org2MSP\": false"
-  checkCommitReadiness 2 "\"Org1MSP\": true" "\"Org2MSP\": false"
-
-  ## now approve also for org2
-  approveForMyOrg 2
-
-  ## check whether the chaincode definition is ready to be committed
-  ## expect them both to have approved
-  checkCommitReadiness 1 "\"Org1MSP\": true" "\"Org2MSP\": true"
-  checkCommitReadiness 2 "\"Org1MSP\": true" "\"Org2MSP\": true"
-
-  ## now that we know for sure both orgs have approved, commit the definition
-  commitChaincodeDefinition 1 2
-
-  ## query on both orgs to see that the definition committed successfully
-  queryCommitted 1
-  queryCommitted 2
-
-  ## Invoke the chaincode
-  chaincodeInvokeInit 1 2
-
-  sleep 10
-
-  ## Invoke the chaincode
-  chaincodeInvoke 1 2
-
-  # Query chaincode on peer0.org1
-  echo "Querying chaincode on peer0.org1..."
-  chaincodeQuery 1
-
-  cd -
-
-}
-
-deployN2() {
-  #Sync smartcontract code
-  rsync --verbose -a -z --delete ./contract/ ../network/net2/chaincode/fabcar/javascript
-
-  cd ../network/net2/test-network
-  # ./network.sh deployCC -l
-
-  export FABRIC_CFG_PATH=${PWD}/configtx
-
-  CHANNEL_NAME="mychannel"
-  VERSION=2
-  CLI_DELAY=3
-  MAX_RETRY=5
-  VERBOSE=false
-  FABRIC_CFG_PATH=$PWD/../config/
-  CC_RUNTIME_LANGUAGE=node # chaincode runtime language is node.js
-  CC_SRC_PATH="../chaincode/fabcar/javascript/"
-
-  # import utils
-  . scripts/envVar.sh
-
-  LAST_VERSION=$(queryVersion 1)
-  if [[ -z "$LAST_VERSION" ]]; then
-    echo "Install First Time"
-    VERSION=1
-  else
-    VERSION=$(( $LAST_VERSION + 1 ))
-  fi
-  echo $VERSION
-
-  ## at first we package the chaincode
-  packageChaincode 1
-
-  ## Install chaincode on peer0.org1 and peer0.org2
-  echo "Installing chaincode on peer0.org1..."
-  installChaincode 1
-  echo "Install chaincode on peer0.org2..."
-  installChaincode 2
-
-  ## query whether the chaincode is installed
-  queryInstalled 1
-
-  ## approve the definition for org1
-  approveForMyOrg 1
-
-  ## check whether the chaincode definition is ready to be committed
-  ## expect org1 to have approved and org2 not to
-  checkCommitReadiness 1 "\"Org1MSP\": true" "\"Org2MSP\": false"
-  checkCommitReadiness 2 "\"Org1MSP\": true" "\"Org2MSP\": false"
-
-  ## now approve also for org2
-  approveForMyOrg 2
-
-  ## check whether the chaincode definition is ready to be committed
-  ## expect them both to have approved
-  checkCommitReadiness 1 "\"Org1MSP\": true" "\"Org2MSP\": true"
-  checkCommitReadiness 2 "\"Org1MSP\": true" "\"Org2MSP\": true"
-
-  ## now that we know for sure both orgs have approved, commit the definition
-  commitChaincodeDefinition 1 2
-
-  ## query on both orgs to see that the definition committed successfully
-  queryCommitted 1
-  queryCommitted 2
-
-  ## Invoke the chaincode
-  chaincodeInvokeInit 1 2
-
-  sleep 10
-
-  ## Invoke the chaincode
-  chaincodeInvoke 1 2
-
-  # Query chaincode on peer0.org1
-  echo "Querying chaincode on peer0.org1..."
-  chaincodeQuery 1
-
-  cd -
-
-}
 
 packageChaincode() {
   ORG=$1
@@ -428,25 +207,6 @@ queryCommitted() {
   fi
 }
 
-queryVersion(){
-  ORG=$1
-  setGlobals $ORG
-
-  local VER=$(peer lifecycle chaincode querycommitted --channelID $CHANNEL_NAME --name fabcar)
-  LAST_VERSION=$(echo $VER | grep -oE 'Sequence: [[:alnum:]]+' | awk '{print $2}')
-  echo $LAST_VERSION
-}
-
-queryPackageID(){
-  ORG=$1
-  setGlobals $ORG
-
-  local PID=$(peer lifecycle chaincode queryinstalled)
-
-  local PACKAGE_ID=$(echo $PID | grep -oE 'ID: ([[:alnum:]]|:|_)+' | awk '{print $2}')
-  echo $PACKAGE_ID
-}
-
 chaincodeInvokeInit() {
   parsePeerConnectionParameters $@
   res=$?
@@ -457,12 +217,12 @@ chaincodeInvokeInit() {
   # it using the "-o" option
   if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
     set -x
-    peer chaincode invoke -o localhost:7050 -C $CHANNEL_NAME -n fabcar $PEER_CONN_PARMS --isInit -c '{"function":"init","Args":["1","2","3","4"]}' >&log.txt
+    peer chaincode invoke -o localhost:7050 -C $CHANNEL_NAME -n fabcar $PEER_CONN_PARMS --isInit -c '{"function":"init","Args":[]}' >&log.txt
     res=$?
     set +x
   else
     set -x
-    peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n fabcar $PEER_CONN_PARMS --isInit -c '{"function":"init","Args":["1","2","3","4"]}' >&log.txt
+    peer chaincode invoke -o localhost:7050 --ordererTLSHostnameOverride orderer.example.com --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n fabcar $PEER_CONN_PARMS --isInit -c '{"function":"initLedger","Args":[]}' >&log.txt
     res=$?
     set +x
   fi
@@ -527,5 +287,51 @@ chaincodeQuery() {
   fi
 }
 
+## at first we package the chaincode
+packageChaincode 1
 
-main
+## Install chaincode on peer0.org1 and peer0.org2
+echo "Installing chaincode on peer0.org1..."
+installChaincode 1
+echo "Install chaincode on peer0.org2..."
+installChaincode 2
+
+## query whether the chaincode is installed
+queryInstalled 1
+
+## approve the definition for org1
+approveForMyOrg 1
+
+## check whether the chaincode definition is ready to be committed
+## expect org1 to have approved and org2 not to
+checkCommitReadiness 1 "\"Org1MSP\": true" "\"Org2MSP\": false"
+checkCommitReadiness 2 "\"Org1MSP\": true" "\"Org2MSP\": false"
+
+## now approve also for org2
+approveForMyOrg 2
+
+## check whether the chaincode definition is ready to be committed
+## expect them both to have approved
+checkCommitReadiness 1 "\"Org1MSP\": true" "\"Org2MSP\": true"
+checkCommitReadiness 2 "\"Org1MSP\": true" "\"Org2MSP\": true"
+
+## now that we know for sure both orgs have approved, commit the definition
+commitChaincodeDefinition 1 2
+
+## query on both orgs to see that the definition committed successfully
+queryCommitted 1
+queryCommitted 2
+
+## Invoke the chaincode
+chaincodeInvokeInit 1 2
+
+sleep 10
+
+## Invoke the chaincode
+chaincodeInvoke 1 2
+
+# Query chaincode on peer0.org1
+echo "Querying chaincode on peer0.org1..."
+chaincodeQuery 1
+
+exit 0
