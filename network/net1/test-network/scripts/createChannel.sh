@@ -33,7 +33,7 @@ createChannelTx() {
 
 createAncorPeerTx() {
 
-	for orgmsp in Org1MSP Org2MSP; do
+	for orgmsp in Org1MSP; do
 
 	echo "#######    Generating anchor peer update for ${orgmsp}  ##########"
 	set -x
@@ -148,14 +148,10 @@ createChannel
 ## Join all the peers to the channel
 echo "Join Org1 peers to the channel..."
 joinChannel 1
-echo "Join Org2 peers to the channel..."
-joinChannel 2
 
 ## Set the anchor peers for each org in the channel
 echo "Updating anchor peers for org1..."
 updateAnchorPeers 1
-echo "Updating anchor peers for org2..."
-updateAnchorPeers 2
 
 echo
 echo "========= Channel successfully joined =========== "

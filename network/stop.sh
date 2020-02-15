@@ -55,21 +55,30 @@ main() {
 
 stopN0(){
   cd ./net0/test-network
-  rm -Rf organizations/peerOrganizations && rm -Rf organizations/ordererOrganizations
+  rm -rf organizations/peerOrganizations
+  rm -rf organizations/ordererOrganizations
+  rm -rf organizations/fabric-ca/ordererOrg/*
+  rm -rf organizations/fabric-ca/org1/*
   ./network.sh down
   cd -
 }
 
 stopN1(){
-  cd ./net2/test-network
-  rm -Rf organizations/peerOrganizations && rm -Rf organizations/ordererOrganizations
+  cd ./net1/test-network
+  rm -rf organizations/peerOrganizations
+  rm -rf organizations/ordererOrganizations
+  rm -rf organizations/fabric-ca/ordererOrg/*
+  rm -rf organizations/fabric-ca/org1/*
   ./network.sh down
   cd -
 }
 
 stopN2(){
   cd ./net2/test-network
-  rm -Rf organizations/peerOrganizations && rm -Rf organizations/ordererOrganizations
+  rm -rf organizations/peerOrganizations
+  rm -rf organizations/ordererOrganizations
+  rm -rf organizations/fabric-ca/ordererOrg/*
+  rm -rf organizations/fabric-ca/org1/*
   ./network.sh down
   cd -
 }
