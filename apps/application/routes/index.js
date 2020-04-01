@@ -13,5 +13,15 @@ router.post('/v1/transaction/create', apiRouter)
 router.use('/api-docs', swaggerUi.serve);
 router.get('/api-docs', swaggerUi.setup(swaggerDocument));
 router.get('/v1/transaction/', apiRouter);
-router.post('/v1/transaction/createUser', apiRouter);
+
+router.post('/v1/userCreate', apiRouter);
+router.post('/v1/companyCreate', apiRouter);
+router.post('/v1/missionCreate', apiRouter);
+router.post('/v1/rewardCreate', apiRouter);
+router.post('/v1/missionEnroll', apiRouter);
+router.post('/v1/awardReward', apiRouter);
+router.post('/v1/redeemReward', apiRouter);
+
+router.post('/v1/tokensSend', apiRouter);
+
 module.exports = router;
