@@ -1,43 +1,98 @@
-#Swagger docs:
-#https://swagger.io/docs/specification/basic-structure/
-openapi: 3.0.0
+swagger: '2.0'
 info:
-  title: My Sample API
-  description: Optional multiline or single-line description in [CommonMark](http://commonmark.org/help/) or HTML.
-  version: 0.0.1
+  description: On-chain API
+  version: 1.0.0
+  title: gamificat.io API for on-chain access
+  # put the contact info for your development or API team
+  contact:
+    email: contact@gamificat.io
+
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
 servers:
   - url: http://localhost:3000/v1
     description: API server
+# tags are used for organizing operations
+tags:
+- name: organizations
+  description: Secured organizations-only calls
+
 paths:
-  /api:
+  /v1/transaction:
     get:
-      summary: Returns msg.
-      description: Optional extended description in CommonMark or HTML.
+      tags:
+      - organizations
+      summary: searches on-chain transaction
+      operationId: searchInventory
+      description: |
+        By passing in a specific transaction identifier, it retrieves on-chain transaction
+      produces:
+      - application/json
+      parameters:
+      - in: query
+        name: transactionId
+        description: mandatory transaction id for looking it up
+        required: true
+        type: string
       responses:
-        '200':    # status code
-          description: Some description
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  type: msg
+        200:
+          description: Successful search with specified identifier
+          schema:
+            items:
+              $ref: '#/definitions/TransactionItem'
+        400:
+          description: bad input parameter
+  /v1/transaction/create:
     post:
-      summary: Returns msg.
-      description: Optional extended description in CommonMark or HTML.
-      requestBody:
-        content:
-          application/json:
-            schema:      # Request body contents
-              type: object
-              properties:
-                value:
-                  type: integer
-                issuer:
-                  type: string
-              example:   # Sample object
-                value: 10
-                issuer: MagnetoCorp
+      tags:
+      - organizations
+      summary: creates on-chain transaction
+      description: By passing specific parameters, it creates a transaction on chain
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: transactionItem
+        description: Transaction to create
+        schema:
+          $ref: '#/definitions/TransactionItem'
       responses:
-        '200':
-          description: OK
+        201:
+          description: transaction created
+        400:
+          description: invalid input, object invalid
+definitions:
+  TransactionItem:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      type:
+        type: string
+        example: Add points
+      userId:
+        type: string
+        format: uuid
+        example: m38xmd-xmmx48m9-xnad889
+      sourceCompany:
+        type: string
+        format: uuid
+        example: d34u39os-fdoi93-38m8dm
+      destinationCompany:
+        type: string
+        format: uuid
+        example: nhmd88dm0-xmm3933-47nmmzz
+      timestamp:
+        type: string
+        example: 1583429932
+# host: api.gamificat.io
+schemes:
+ - http
+# Added by API Auto Mocking Plugin
+host: localhost:3000/
+#basePath: /marlonfrr/gamificat.io/1.0.0
