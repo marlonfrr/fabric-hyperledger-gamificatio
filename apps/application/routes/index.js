@@ -13,4 +13,5 @@ router.post('/v1/transaction/create', apiRouter)
 router.use('/api-docs', swaggerUi.serve);
 router.get('/api-docs', swaggerUi.setup(swaggerDocument));
 router.get('/v1/transaction/', apiRouter);
+router.post('/v1/transaction/createUser', apiRouter);
 module.exports = router;
