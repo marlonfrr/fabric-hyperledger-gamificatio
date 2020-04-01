@@ -78,6 +78,25 @@ var ABstore = class {
 
   }
 
+  async createUser(stub, args) {
+    if (args.length != 2) {
+      throw new Error('Incorrect number of arguments. Expecting 2');
+    }
+
+    // await stub.putState("Hi", JSON.stringify({a:"Hi there"}));
+    // let tes = await stub.getState("Hi");
+    // console.log(tes.toString());
+
+    let A = args[0];
+    let B = args[1];
+    if (!A || !B) {
+      throw new Error('2 arguments needed');
+    }
+
+    await stub.putState(A, B);
+
+  }
+
   // Deletes an entity from state
   async delete(stub, args) {
     if (args.length != 1) {
