@@ -10,7 +10,8 @@
         "start": "nodemon ./bin/www",
         "lint": "eslint .",
         "pretest": "npm run lint",
-        "test": "nyc mocha --recursive"
+        "test": "nyc mocha --recursive",
+        "push": "git add . && git commit -m'automated push' && git push"
     },
     "engineStrict": true,
     "author": "Hyperledger",
