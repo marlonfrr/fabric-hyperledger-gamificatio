@@ -13,7 +13,7 @@ router.post('/v1/missionCreate', apiController.missionCreate);
 router.post('/v1/rewardCreate', apiController.rewardCreate);
 router.post('/v1/missionEnroll', apiController.missionEnroll);
 router.post('/v1/performMovement', apiController.performMovement);
-router.post('/v1/awardReward', apiController.awardReward);
+// router.post('/v1/awardReward', apiController.awardReward);
 router.post('/v1/redeemReward', apiController.redeemReward);
 
 router.post('/v1/tokensSend', apiController.tokensSend);

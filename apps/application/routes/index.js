@@ -20,7 +20,7 @@ router.post('/v1/missionCreate', apiRouter);
 router.post('/v1/rewardCreate', apiRouter);
 router.post('/v1/missionEnroll', apiRouter);
 router.post('/v1/performMovement', apiRouter);
-router.post('/v1/awardReward', apiRouter);
+// router.post('/v1/awardReward', apiRouter);
 router.post('/v1/redeemReward', apiRouter);
 
 router.post('/v1/tokensSend', apiRouter);
