@@ -152,7 +152,7 @@ var ABstore = class {
       console.log("company id to put",companyId)
       // console.log("updated company::>", updatedCompany);
       // Put company with missons updated
-      await stub.putState(companyId, company);
+      await stub.putState(companyId, JSON.stringify(company));
     } else {
       throw new Error("Misson type not expected");
       return;
