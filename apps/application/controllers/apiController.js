@@ -176,14 +176,69 @@ module.exports.getMissions = (req, res) => {
       companyId
     };
     console.log("obj::::>",obj)
-    const result = await contract.submitTransaction(
-      "getMissions",
-      JSON.stringify(obj)
-    );
-    console.log("result in controller:::>", result)
-    console.log("result in controller toString:::>", result.toString())
-    let response = result.toString();
-    res.status(200).json(response);
+    // const result = await contract.submitTransaction(
+    //   "getMissions",
+    //   JSON.stringify(obj)
+    // );
+    // console.log("result in controller:::>", result)
+    // console.log("result in controller toString:::>", result.toString())
+    let response = {
+      missions: [
+        {
+          "_id": "982464389-k490-n839-b75a-mcy9r3xn4659",
+          "_rev": "1-02bd2bea0cafc3229b772a572d318966",
+          "companyId": "c8ef0428-8507-477a-a67a-3aa1f07a4b79",
+          "date": "Thu Apr 02 2020 17:38:53 GMT+0000 (Coordinated Universal Time)",
+          "guestCompanyId": "a38f6556-bbdf-486f-ad13-6f526af8a3d4",
+          "missionName": "Test3cross",
+          "movementsRequired": 20,
+          "rewardId": "954942d8-19ed-4b24-b208-37cf9a80c2fa",
+          "tokensLimit": 1000,
+          "type": "cross",
+          "~version": "CgMBCgA="
+        },
+        {
+          "_id": "36503733-acb7-473b-b75a-90b8cfa353b6",
+          "_rev": "1-02bd2bea0cafc3229b772a572d318966",
+          "companyId": "c8ef0428-8507-477a-a67a-3aa1f07a4b79",
+          "date": "Thu Apr 02 2020 17:38:53 GMT+0000 (Coordinated Universal Time)",
+          "guestCompanyId": "a38f6556-bbdf-486f-ad13-6f526af8a3d4",
+          "missionName": "Test3cross",
+          "movementsRequired": 20,
+          "rewardId": "954942d8-19ed-4b24-b208-37cf9a80c2fa",
+          "tokensLimit": 1000,
+          "type": "cross",
+          "~version": "CgMBCgA="
+        },
+        {
+          "_id": "36503733-acb7-473b-b75a-90b8cfa353b6",
+          "_rev": "1-02bd2bea0cafc3229b772a572d318966",
+          "companyId": "c8ef0428-8507-477a-a67a-3aa1f07a4b79",
+          "date": "Thu Apr 02 2020 17:38:53 GMT+0000 (Coordinated Universal Time)",
+          "guestCompanyId": "a38f6556-bbdf-486f-ad13-6f526af8a3d4",
+          "missionName": "Test3cross",
+          "movementsRequired": 20,
+          "rewardId": "954942d8-19ed-4b24-b208-37cf9a80c2fa",
+          "tokensLimit": 1000,
+          "type": "cross",
+          "~version": "CgMBCgA="
+        },
+        {
+          "_id": "36503733-acb7-473b-b75a-90b8cfa353b6",
+          "_rev": "1-02bd2bea0cafc3229b772a572d318966",
+          "companyId": "c8ef0428-8507-477a-a67a-3aa1f07a4b79",
+          "date": "Thu Apr 02 2020 17:38:53 GMT+0000 (Coordinated Universal Time)",
+          "guestCompanyId": "a38f6556-bbdf-486f-ad13-6f526af8a3d4",
+          "missionName": "Test3cross",
+          "movementsRequired": 20,
+          "rewardId": "954942d8-19ed-4b24-b208-37cf9a80c2fa",
+          "tokensLimit": 1000,
+          "type": "cross",
+          "~version": "CgMBCgA="
+        }
+      ]
+    }
+    res.status(200).send(response);
   });
 };
 
