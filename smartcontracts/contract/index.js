@@ -182,7 +182,7 @@ var ABstore = class {
     console.log("company::>", company);
     let companyMissions = company.missions;
     let ret = [];
-    companyMissions.map((v, i) => {
+    companyMissions.map(async (v, i) => {
       let missionBuffer = await stub.getState(v);
       let mission = JSON.parse(missionBuffer.toString());
       ret.push(mission);
