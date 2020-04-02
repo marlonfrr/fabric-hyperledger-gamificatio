@@ -4,13 +4,11 @@ const getGateway = require("../gateway/gateway");
 const uuidv4 = require("uuid/v4");
 
 module.exports.getTransaction = (req, res) => {
-  // res.status(200);
-  // res.status(200).json({msg: 'hi'});
   return getGateway.then(async ({ gateway, network }) => {
     const contract = network.getContract("fabcar");
     const result = await contract.submitTransaction(
       "query",
-      "3c10ede2-3a64-4610-962d-42f3bc50a25a"
+      req.body.transactionId
     );
     let response = JSON.parse(result.toString());
     res.status(200).json(response);
