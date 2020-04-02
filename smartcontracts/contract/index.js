@@ -180,7 +180,7 @@ var ABstore = class {
     let company = JSON.parse(companyBuffer.toString());
     console.log("company::>", company);
     var obj = {}
-    company.missions.map(async (v, i) => {
+    return company.missions.map(async (v, i) => {
       console.log("Valuee:::>", v);
       let missionBuffer = await stub.getState(v);
       console.log("Mission buffer:::>", missionBuffer);
@@ -191,9 +191,10 @@ var ABstore = class {
       console.log("ret", ret);
       obj = { result: ret };
     console.log("IN OBJ",obj)
-    });
-    console.log("OUT OBJ",obj)
     return obj;
+    });
+    // console.log("OUT OBJ",obj)
+    // return obj;
   }
 
   async rewardCreate(stub, args) {
