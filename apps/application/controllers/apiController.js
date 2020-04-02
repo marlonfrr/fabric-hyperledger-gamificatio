@@ -194,6 +194,10 @@ module.exports.getMissions = (req, res) => {
           "movementsRequired": 20,
           "rewardId": "954942d8-19ed-4b24-b208-37cf9a80c2fa",
           "tokensLimit": 1000,
+          "reward":{
+            key1:"Cupón",
+            key2: "20%"
+          },
           "type": "cross",
           "~version": "CgMBCgA="
         },
@@ -203,8 +207,12 @@ module.exports.getMissions = (req, res) => {
           "companyId": "c8ef0428-8507-477a-a67a-3aa1f07a4b79",
           "date": "Thu Apr 02 2020 17:38:53 GMT+0000 (Coordinated Universal Time)",
           "guestCompanyId": "a38f6556-bbdf-486f-ad13-6f526af8a3d4",
-          "missionName": "Test3cross",
+          "missionName": "Test5cross",
           "movementsRequired": 20,
+          "reward":{
+            key1:"Entrada gratis",
+            key2: "Concierto X"
+          },
           "rewardId": "954942d8-19ed-4b24-b208-37cf9a80c2fa",
           "tokensLimit": 1000,
           "type": "cross",
@@ -216,8 +224,12 @@ module.exports.getMissions = (req, res) => {
           "companyId": "c8ef0428-8507-477a-a67a-3aa1f07a4b79",
           "date": "Thu Apr 02 2020 17:38:53 GMT+0000 (Coordinated Universal Time)",
           "guestCompanyId": "a38f6556-bbdf-486f-ad13-6f526af8a3d4",
-          "missionName": "Test3cross",
+          "missionName": "EnlaU",
           "movementsRequired": 20,
+          "reward":{
+            key1:"Domicilio gratis",
+            key2: "5.0000"
+          },
           "rewardId": "954942d8-19ed-4b24-b208-37cf9a80c2fa",
           "tokensLimit": 1000,
           "type": "cross",
@@ -229,8 +241,12 @@ module.exports.getMissions = (req, res) => {
           "companyId": "c8ef0428-8507-477a-a67a-3aa1f07a4b79",
           "date": "Thu Apr 02 2020 17:38:53 GMT+0000 (Coordinated Universal Time)",
           "guestCompanyId": "a38f6556-bbdf-486f-ad13-6f526af8a3d4",
-          "missionName": "Test3cross",
+          "missionName": "Beat",
           "movementsRequired": 20,
+          "reward":{
+            key1:"Viaje gratis",
+            key2: "10.000"
+          },
           "rewardId": "954942d8-19ed-4b24-b208-37cf9a80c2fa",
           "tokensLimit": 1000,
           "type": "cross",
