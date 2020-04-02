@@ -166,6 +166,30 @@ var ABstore = class {
     await stub.putState(A, B);
   }
 
+  async getMissions(stub, args) {
+    if (args.length != 2) {
+      throw new Error("Incorrect number of arguments. Expecting 2");
+    }
+    let A = args[0];
+    let B = args[1];
+    if (!A || !B) {
+      throw new Error("2 arguments needed");
+    }
+    let json = JSON.parse(B);
+    let { companyId } = json;
+    let companyBuffer = await stub.getState(companyId);
+    let company = JSON.parse(companyBuffer.toString());
+    console.log("company::>", company);
+    let companyMissions = company.missions;
+    let ret = [];
+    companyMissions.map((v, i) => {
+      let missionBuffer = await stub.getState(v);
+      let mission = JSON.parse(missionBuffer.toString());
+      ret.push(mission);
+    });
+    return ret;
+  }
+
   async rewardCreate(stub, args) {
     if (args.length != 2) {
       throw new Error("Incorrect number of arguments. Expecting 2");
@@ -220,7 +244,9 @@ var ABstore = class {
     let userBuffer = await stub.getState(userId);
     let user = JSON.parse(userBuffer.toString());
     console.log("user::>", user);
-    let missionIndex = user["enrolledMissions"].findIndex(value => {return value.missionId==missionId});
+    let missionIndex = user["enrolledMissions"].findIndex(value => {
+      return value.missionId == missionId;
+    });
     console.log("missionIndex::>", missionIndex);
     user["enrolledMissions"][missionIndex].movementsPerformed++;
     console.log("updated user", user);

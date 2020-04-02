@@ -170,6 +170,19 @@ module.exports.missionCreate = (req, res) => {
   });
 };
 
+module.exports.getMissions = (req, res) => {
+  return getGateway.then(async ({ gateway, network }) => {
+    const contract = network.getContract("fabcar");
+    let { companyId } = req.body;
+    const result = await contract.submitTransaction(
+      "getMissions",
+      JSON.stringify({ companyId })
+    );
+    let response = JSON.parse(result.toString());
+    res.status(200).json(response);
+  });
+};
+
 module.exports.rewardCreate = (req, res) => {
   console.log(req.body);
   return getGateway.then(async ({ gateway, network }) => {
