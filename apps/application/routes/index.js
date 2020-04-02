@@ -16,7 +16,7 @@ router.get('/v1/transaction/', apiRouter);
 
 
 
-router.get('/v1/getMissions', apiRouter);
+router.post('/v1/getMissions', apiRouter);
 
 router.post('/v1/userCreate', apiRouter);
 router.post('/v1/companyCreate', apiRouter);
