@@ -180,9 +180,10 @@ module.exports.getMissions = (req, res) => {
       "getMissions",
       JSON.stringify(obj)
     );
-    console.log("result in controller:::>", result.toString())
+    console.log("result in controller:::>", result)
+    console.log("result in controller toString:::>", result.toString())
     let response = result.toString();
-    res.status(200).send(response);
+    res.status(200).json(response);
   });
 };
 
