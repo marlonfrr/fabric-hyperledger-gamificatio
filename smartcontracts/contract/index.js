@@ -93,8 +93,7 @@ var ABstore = class {
       throw new Error('2 arguments needed');
     }
 
-    await stub.putState(A, B);
-
+    await stub.putState("test", {"a": "empeño"});
   }
 
   // Deletes an entity from state
