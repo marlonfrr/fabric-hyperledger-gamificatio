@@ -125,6 +125,9 @@ module.exports.missionCreate = (req, res) => {
         date: Date(Date.now())
       };
     } else if (type == "self") {
+      console.log("-----------------------------------------")
+      console.log("self")
+      console.log("-----------------------------------------")
       obj = {
         companyId,
         missionName,
