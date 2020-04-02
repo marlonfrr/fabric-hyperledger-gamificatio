@@ -111,7 +111,14 @@ module.exports.companyCreate = (req, res) => {
 
 module.exports.missionCreate = (req, res) => {
   console.log(req.body);
-  let { companyId, missionName, tokensLimit, rewardId, type, movementsRequired } = req.body;
+  let {
+    companyId,
+    missionName,
+    tokensLimit,
+    rewardId,
+    type,
+    movementsRequired
+  } = req.body;
   return getGateway.then(async ({ gateway, network }) => {
     const contract = network.getContract("fabcar");
     let key = uuidv4();
@@ -213,20 +220,44 @@ module.exports.missionEnroll = (req, res) => {
   });
 };
 
-module.exports.awardReward = (req, res) => {
+module.exports.performMovement = (req, res) => {
   console.log(req.body);
   return getGateway.then(async ({ gateway, network }) => {
     const contract = network.getContract("fabcar");
-    // try{
-    //     const result = await contract.submitTransaction('invoke', bId, JSON.stringify(obj));
-    //    console.log(result);
-    //   //  let response = JSON.parse(result.toString('utf-8'));
-    // //console.log(response);
-    // }catch(err){console.log(err)}
+    let key = uuidv4();
+    let obj = {
+      userId: req.body.userId,
+      missionId: req.body.missionId
+    };
+    try {
+      const result = await contract.submitTransaction(
+        "performMovement",
+        key,
+        JSON.stringify(obj)
+      );
+      console.log(result);
+    } catch (err) {
+      console.log(err);
+    }
 
-    res.status(200).json("awardReward");
+    res.status(200).json(obj);
   });
 };
+
+// module.exports.awardReward = (req, res) => {
+//   console.log(req.body);
+//   return getGateway.then(async ({ gateway, network }) => {
+//     const contract = network.getContract("fabcar");
+//     // try{
+//     //     const result = await contract.submitTransaction('invoke', bId, JSON.stringify(obj));
+//     //    console.log(result);
+//     //   //  let response = JSON.parse(result.toString('utf-8'));
+//     // //console.log(response);
+//     // }catch(err){console.log(err)}
+
+//     res.status(200).json("awardReward");
+//   });
+// };
 
 module.exports.redeemReward = (req, res) => {
   console.log(req.body);
