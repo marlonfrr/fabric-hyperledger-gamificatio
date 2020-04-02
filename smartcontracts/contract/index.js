@@ -78,7 +78,7 @@ var ABstore = class {
 
   }
 
-  async createUser(stub, args) {
+  async userCreate(stub, args) {
     if (args.length != 2) {
       throw new Error('Incorrect number of arguments. Expecting 2');
     }
