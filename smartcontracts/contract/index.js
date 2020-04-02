@@ -190,7 +190,9 @@ var ABstore = class {
       ret.push(mission);
       console.log("ret", ret);
       obj = { result: ret };
+    console.log("IN OBJ",obj)
     });
+    console.log("OUT OBJ",obj)
     return obj;
   }
 
