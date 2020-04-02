@@ -189,7 +189,7 @@ var ABstore = class {
       ret.push(mission);
       console.log("ret",ret)
       let obj = {result: ret}
-      return JSON.stringify(obj);
+      return obj;
     });
   }
 
