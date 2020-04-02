@@ -174,12 +174,16 @@ module.exports.getMissions = (req, res) => {
   return getGateway.then(async ({ gateway, network }) => {
     const contract = network.getContract("fabcar");
     let { companyId } = req.body;
+    let obj = {
+      companyId
+    };
     const result = await contract.submitTransaction(
       "getMissions",
-      JSON.stringify({ companyId })
+      JSON.stringify({ obj })
     );
-    let response = JSON.parse(result.toString());
-    res.status(200).json(response);
+    console.log("result in controller:::>", result)
+    let response = result;
+    res.status(200).send(response);
   });
 };
 
