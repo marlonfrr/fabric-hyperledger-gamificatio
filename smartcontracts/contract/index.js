@@ -220,8 +220,8 @@ var ABstore = class {
     let userBuffer = await stub.getState(userId);
     let user = JSON.parse(userBuffer.toString());
     console.log("user::>", user);
-    let userMissions = user["enrolledMissions"];
-    let missionIndex = userMissions.findIndex(value => {value.missionId==missionId});
+    let missionIndex = user["enrolledMissions"].findIndex(value => {value.missionId==missionId});
+    console.log("missionIndex::>", missionIndex);
     user["enrolledMissions"][missionIndex].movementsPerformed++;
     console.log("updated user", user);
     console.log("user id to put", userId);
