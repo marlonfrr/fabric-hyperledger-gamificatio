@@ -167,15 +167,14 @@ var ABstore = class {
   }
 
   async getMissions(stub, args) {
-    if (args.length != 2) {
-      throw new Error("Incorrect number of arguments. Expecting 2");
+    if (args.length != 1) {
+      throw new Error("Incorrect number of arguments. Expecting 1");
     }
     let A = args[0];
-    let B = args[1];
-    if (!A || !B) {
-      throw new Error("2 arguments needed");
+    if (!A) {
+      throw new Error("1 argument needed");
     }
-    let json = JSON.parse(B);
+    let json = JSON.parse(A);
     let { companyId } = json;
     let companyBuffer = await stub.getState(companyId);
     let company = JSON.parse(companyBuffer.toString());
@@ -185,9 +184,8 @@ var ABstore = class {
     companyMissions.map(async (v, i) => {
       let missionBuffer = await stub.getState(v);
       let mission = JSON.parse(missionBuffer.toString());
-      ret.push({mission:"test"});
+      ret.push(mission);
     });
-    ret.push({missionoo:"aa"});
     return ret;
   }
 
