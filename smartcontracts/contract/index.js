@@ -180,12 +180,12 @@ var ABstore = class {
     let company = JSON.parse(companyBuffer.toString());
     console.log("company::>", company);
     let ret = [];
-    await company.missions.map(async (v, i) => {
+    company.missions.map(async (v, i) => {
       let missionBuffer = await stub.getState(v);
       let mission = JSON.parse(missionBuffer.toString());
       ret.push(mission);
+      return ret;
     });
-    return ret;
   }
 
   async rewardCreate(stub, args) {
