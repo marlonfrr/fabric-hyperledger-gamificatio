@@ -114,7 +114,7 @@ var ABstore = class {
     let A = args[0];
     let B = args[1];
     let json = JSON.parse(B);
-    console.log("incoming parsed json", json)
+    console.log("incoming parsed json", json);
     if (json.type == "cross") {
       let {
         companyId,
@@ -127,30 +127,34 @@ var ABstore = class {
       // Update local company missions array
       let companyBuffer = await stub.getState(companyId);
       let company = companyBuffer.toString();
-      console.log("company::>",company);
+      console.log("company::>", company);
       let updatedCompany = { ...company.missions.push(A) };
-      console.log("updated company::>",updatedCompany);
+      console.log("updated company::>", updatedCompany);
       // Put company with missons updated
       await stub.putState(companyId, updatedCompany);
 
       // Update guest company guest-missions array
       let guestCompanyBuffer = await stub.getState(guestCompanyId);
       let guestCompany = guestCompanyBuffer.toString();
-      console.log("guest company::>",guestCompany);
+      console.log("guest company::>", guestCompany);
       let updatedGuestCompany = { ...guestCompany.guestMissions.push(A) };
-      console.log("guest updated company::>",updatedGuestCompany);
+      console.log("guest updated company::>", updatedGuestCompany);
       // Put company with missons updated
       await stub.putState(guestCompanyId, updatedGuestCompany);
-    } else {
+    } else if (json.type == "self") {
       let { companyId, missionName, tokensLimit, type, date } = json;
       // Update local company missions array
       let companyBuffer = await stub.getState(companyId);
       let company = companyBuffer.toString();
-      console.log("company::>",company);
-      let updatedCompany = { ...company.missions.push(A) };
-      console.log("updated company::>",updatedCompany);
+      console.log("company::>", company);
+      company['missions'].push(A)
+      console.log(company)
+      // console.log("updated company::>", updatedCompany);
       // Put company with missons updated
-      await stub.putState(companyId, updatedCompany);
+      await stub.putState(companyId, company);
+    } else {
+      throw new Error("Misson type not expected");
+      return;
     }
 
     if (!A || !B) {
