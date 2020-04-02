@@ -132,7 +132,7 @@ var ABstore = class {
       console.log("updated company",company)
       console.log("company id to put",companyId)
       // Put company with missons updated
-      await stub.putState(companyId, JSON.stringify(updatedCompany));
+      await stub.putState(companyId, JSON.stringify(company));
 
       // Update guest company guest-missions array
       let guestCompanyBuffer = await stub.getState(guestCompanyId);
@@ -141,7 +141,7 @@ var ABstore = class {
       guestCompany['guestMissions'].push(A)
       console.log("updated company",guestCompany)
       // Put company with missons updated
-      await stub.putState(guestCompanyId, JSON.stringify(updatedGuestCompany));
+      await stub.putState(guestCompanyId, JSON.stringify(guestCompany));
     } else if (json.type == "self") {
       let { companyId, missionName, tokensLimit, type, date } = json;
       // Update local company missions array
