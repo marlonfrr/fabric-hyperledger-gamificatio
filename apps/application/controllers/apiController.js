@@ -194,7 +194,10 @@ module.exports.getMissions = (req, res) => {
           "movementsRequired": 20,
           "rewardId": "954942d8-19ed-4b24-b208-37cf9a80c2fa",
           "tokensLimit": 1000,
+          "from":"muvo.png",
+          "to":"raver.png",
           "reward":{
+            desc: "Completa 5 viajes en Muvo y obtén 20% de descuento en Raver",
             key1:"Cupón",
             key2: "20%"
           },
@@ -209,7 +212,10 @@ module.exports.getMissions = (req, res) => {
           "guestCompanyId": "a38f6556-bbdf-486f-ad13-6f526af8a3d4",
           "missionName": "Test5cross",
           "movementsRequired": 20,
+          "from":"grin.png",
+          "to":"raver.png",
           "reward":{
+            desc: "Completa 4 viajes en Grin y obtén 1 entrada a un concierto en Raver",
             key1:"Entrada gratis",
             key2: "Concierto X"
           },
@@ -226,7 +232,10 @@ module.exports.getMissions = (req, res) => {
           "guestCompanyId": "a38f6556-bbdf-486f-ad13-6f526af8a3d4",
           "missionName": "EnlaU",
           "movementsRequired": 20,
+          "from":"raver.png",
+          "to":"enlau.png",
           "reward":{
+            desc: "Compra 1 entrada y obtén domicilio gratis hasta 5.000",
             key1:"Domicilio gratis",
             key2: "5.0000"
           },
@@ -243,7 +252,10 @@ module.exports.getMissions = (req, res) => {
           "guestCompanyId": "a38f6556-bbdf-486f-ad13-6f526af8a3d4",
           "missionName": "Beat",
           "movementsRequired": 20,
+          "from":"raver.png",
+          "to":"beat.png",
           "reward":{
+            desc: "Compra 1 entrada y recibe un viaje gratis en Beat",
             key1:"Viaje gratis",
             key2: "10.000"
           },
