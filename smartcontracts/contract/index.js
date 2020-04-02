@@ -187,6 +187,7 @@ var ABstore = class {
       let mission = JSON.parse(missionBuffer.toString());
       console.log("missionnnnn",mission)
       ret.push(mission);
+      console.log("ret",ret)
       let obj = {result: ret}
       return JSON.stringify(obj);
     });
