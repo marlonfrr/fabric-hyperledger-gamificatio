@@ -148,7 +148,8 @@ var ABstore = class {
       let company = JSON.parse(companyBuffer.toString());
       console.log("company::>", company);
       company['missions'].push(A)
-      console.log(company)
+      console.log("updated company",company)
+      console.log("company id to put",companyId)
       // console.log("updated company::>", updatedCompany);
       // Put company with missons updated
       await stub.putState(companyId, company);
@@ -160,7 +161,8 @@ var ABstore = class {
     if (!A || !B) {
       throw new Error("2 arguments needed");
     }
-
+    console.log("A::>",A)
+    console.log("B::>",B)
     // Put mission record
     await stub.putState(A, B);
   }
