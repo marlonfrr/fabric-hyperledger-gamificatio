@@ -128,18 +128,18 @@ var ABstore = class {
       let companyBuffer = await stub.getState(companyId);
       let company = JSON.parse(companyBuffer.toString());
       console.log("company::>", company);
-      company['missions'].push(A)
-      console.log("updated company",company)
-      console.log("company id to put",companyId)
+      company["missions"].push(A);
+      console.log("updated company", company);
+      console.log("company id to put", companyId);
       // Put company with missons updated
       await stub.putState(companyId, JSON.stringify(company));
 
       // Update guest company guest-missions array
       let guestCompanyBuffer = await stub.getState(guestCompanyId);
-      let guestCompany = JSON.parse(guestCompanyBuffer.toString())
+      let guestCompany = JSON.parse(guestCompanyBuffer.toString());
       console.log("guest company::>", guestCompany);
-      guestCompany['guestMissions'].push(A)
-      console.log("updated company",guestCompany)
+      guestCompany["guestMissions"].push(A);
+      console.log("updated company", guestCompany);
       // Put company with missons updated
       await stub.putState(guestCompanyId, JSON.stringify(guestCompany));
     } else if (json.type == "self") {
@@ -148,23 +148,61 @@ var ABstore = class {
       let companyBuffer = await stub.getState(companyId);
       let company = JSON.parse(companyBuffer.toString());
       console.log("company::>", company);
-      company['missions'].push(A)
-      console.log("updated company",company)
-      console.log("company id to put",companyId)
+      company["missions"].push(A);
+      console.log("updated company", company);
+      console.log("company id to put", companyId);
       // Put company with missons updated
       await stub.putState(companyId, JSON.stringify(company));
     } else {
       throw new Error("Misson type not expected");
-      return;
     }
 
     if (!A || !B) {
       throw new Error("2 arguments needed");
     }
-    console.log("A::>",A)
-    console.log("B::>",B)
+    console.log("A::>", A);
+    console.log("B::>", B);
     // Put mission record
     await stub.putState(A, B);
+  }
+
+  async rewardCreate(stub, args) {
+    if (args.length != 2) {
+      throw new Error("Incorrect number of arguments. Expecting 2");
+    }
+
+    let A = args[0];
+    let B = args[1];
+    if (!A || !B) {
+      throw new Error("2 arguments needed");
+    }
+
+    await stub.putState(A, B);
+  }
+
+  async missionEnroll(stub, args) {
+    if (args.length != 2) {
+      throw new Error("Incorrect number of arguments. Expecting 2");
+    }
+    let A = args[0];
+    let B = args[1];
+    if (!A || !B) {
+      throw new Error("2 arguments needed");
+    }
+    // Pushear mission al usuario
+    let json = JSON.parse(B);
+    let { userId, missionId } = json;
+    let userBuffer = await stub.getState(userId);
+    let user = JSON.parse(userBuffer.toString());
+    let missionBuffer = await stub.getState(missionId);
+    let mission = JSON.parse(missionBuffer.toString());
+    let missionToPush = {...mission, missionId, movementsPerformed: 0}
+    console.log("user::>", user);
+    user["enrolledMissions"].push(missionToPush);
+    console.log("updated user", user);
+    console.log("user id to put", userId);
+    // Put company with missons updated
+    await stub.putState(userId, JSON.stringify(user));
   }
 
   // Deletes an entity from state

@@ -54,12 +54,13 @@ module.exports.postTransaction = (req, res) => {
 
 module.exports.userCreate = (req, res) => {
   console.log(req.body);
-  let { name, age } = req.body;
+  let { name, id, age } = req.body;
   return getGateway.then(async ({ gateway, network }) => {
     const contract = network.getContract("fabcar");
-    let key = uuidv4();
+    // let key = uuidv4();
     let obj = {
       name,
+      id,
       age,
       tokens: 0,
       enrolledMissions: [],
@@ -70,7 +71,7 @@ module.exports.userCreate = (req, res) => {
     try {
       const result = await contract.submitTransaction(
         "userCreate",
-        key,
+        id,
         JSON.stringify(obj)
       );
       console.log(result);
@@ -78,7 +79,7 @@ module.exports.userCreate = (req, res) => {
       console.log(err);
     }
 
-    res.status(200).json({ ...obj, key });
+    res.status(200).json(obj);
   });
 };
 
@@ -110,38 +111,41 @@ module.exports.companyCreate = (req, res) => {
 
 module.exports.missionCreate = (req, res) => {
   console.log(req.body);
-  let { companyId, missionName, tokensLimit, type } = req.body;
+  let { companyId, missionName, tokensLimit, rewardId, type, movementsRequired } = req.body;
   return getGateway.then(async ({ gateway, network }) => {
     const contract = network.getContract("fabcar");
     let key = uuidv4();
     let obj = undefined;
     if (type == "cross") {
-      console.log("-----------------------------------------")
-      console.log("cross")
-      console.log("-----------------------------------------")
+      console.log("-----------------------------------------");
+      console.log("cross");
+      console.log("-----------------------------------------");
       obj = {
         companyId,
         guestCompanyId: req.body.guestCompanyId,
         missionName,
+        rewardId,
         tokensLimit,
+        movementsRequired,
         type,
         date: Date(Date.now())
       };
     } else if (type == "self") {
-      console.log("-----------------------------------------")
-      console.log("self")
-      console.log("-----------------------------------------")
+      console.log("-----------------------------------------");
+      console.log("self");
+      console.log("-----------------------------------------");
       obj = {
         companyId,
         missionName,
+        rewardId,
         tokensLimit,
         type,
         date: Date(Date.now())
       };
     } else {
-      console.log("-----------------------------------------")
-      console.log("Ningún tipo (apiController.js)")
-      console.log("-----------------------------------------")
+      console.log("-----------------------------------------");
+      console.log("Ningún tipo (apiController.js)");
+      console.log("-----------------------------------------");
       res.status(500).json({ status: "error" });
     }
     try {
@@ -152,7 +156,7 @@ module.exports.missionCreate = (req, res) => {
       );
       console.log(result);
     } catch (err) {
-      console.log("Failed submiting transaction to contract",err);
+      console.log("Failed submiting transaction to contract", err);
     }
 
     res.status(200).json({ ...obj, key });
@@ -163,14 +167,25 @@ module.exports.rewardCreate = (req, res) => {
   console.log(req.body);
   return getGateway.then(async ({ gateway, network }) => {
     const contract = network.getContract("fabcar");
-    // try{
-    //     const result = await contract.submitTransaction('invoke', bId, JSON.stringify(obj));
-    //    console.log(result);
-    //   //  let response = JSON.parse(result.toString('utf-8'));
-    // //console.log(response);
-    // }catch(err){console.log(err)}
+    let key = uuidv4();
+    let obj = {
+      companyId: req.body.companyId,
+      type: "reward",
+      key1: "coupon",
+      key2: "20%"
+    };
+    try {
+      const result = await contract.submitTransaction(
+        "rewardCreate",
+        key,
+        JSON.stringify(obj)
+      );
+      console.log(result);
+    } catch (err) {
+      console.log(err);
+    }
 
-    res.status(200).json("rewardCreate");
+    res.status(200).json({ ...obj, key });
   });
 };
 
@@ -178,14 +193,23 @@ module.exports.missionEnroll = (req, res) => {
   console.log(req.body);
   return getGateway.then(async ({ gateway, network }) => {
     const contract = network.getContract("fabcar");
-    // try{
-    //     const result = await contract.submitTransaction('invoke', bId, JSON.stringify(obj));
-    //    console.log(result);
-    //   //  let response = JSON.parse(result.toString('utf-8'));
-    // //console.log(response);
-    // }catch(err){console.log(err)}
+    let key = uuidv4();
+    let obj = {
+      userId: req.body.userId,
+      missionId: req.body.missionId
+    };
+    try {
+      const result = await contract.submitTransaction(
+        "missionEnroll",
+        key,
+        JSON.stringify(obj)
+      );
+      console.log(result);
+    } catch (err) {
+      console.log(err);
+    }
 
-    res.status(200).json("missionEnroll");
+    res.status(200).json(obj);
   });
 };
 
