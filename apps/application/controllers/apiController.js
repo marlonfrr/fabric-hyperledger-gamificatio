@@ -80,7 +80,7 @@ module.exports.userCreate = (req, res) => {
       console.log(err);
     }
 
-    res.status(200).json(key,obj);
+    res.status(200).json({...obj,key});
   });
 };
 
