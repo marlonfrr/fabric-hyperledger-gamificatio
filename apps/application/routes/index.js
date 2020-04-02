@@ -14,6 +14,10 @@ router.use('/api-docs', swaggerUi.serve);
 router.get('/api-docs', swaggerUi.setup(swaggerDocument));
 router.get('/v1/transaction/', apiRouter);
 
+
+
+router.get('/v1/getMissions', apiRouter);
+
 router.post('/v1/userCreate', apiRouter);
 router.post('/v1/companyCreate', apiRouter);
 router.post('/v1/missionCreate', apiRouter);
