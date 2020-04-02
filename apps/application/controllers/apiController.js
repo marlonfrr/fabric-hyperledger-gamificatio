@@ -133,6 +133,7 @@ module.exports.missionCreate = (req, res) => {
         date: Date(Date.now())
       };
     } else {
+      console.log("Ningún tipo (apiController.js)")
       res.status(500).json({ status: "error" });
     }
     try {
