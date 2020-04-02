@@ -145,7 +145,7 @@ var ABstore = class {
       let { companyId, missionName, tokensLimit, type, date } = json;
       // Update local company missions array
       let companyBuffer = await stub.getState(companyId);
-      let company = companyBuffer.toString();
+      let company = JSON.parse(companyBuffer.toString());
       console.log("company::>", company);
       company['missions'].push(A)
       console.log(company)
