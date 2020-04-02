@@ -1,0 +1,21 @@
+{
+  "name": "fabric-hyperledger-gamificatio",
+  "version": "1.0.0",
+  "description": "## Deploying sample app in development mode ([no TLS](https://hyperledger-fabric.readthedocs.io/en/latest/chaincode4ade.html#terminal-1-start-the-network), 1 Org, Peer running in dev mode, CouchDB, and solo orderer)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "push": "git add . && git commit -m'automated push' && git push"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marlonfrr/fabric-hyperledger-gamificatio.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/marlonfrr/fabric-hyperledger-gamificatio/issues"
+  },
+  "homepage": "https://github.com/marlonfrr/fabric-hyperledger-gamificatio#readme"
+}
