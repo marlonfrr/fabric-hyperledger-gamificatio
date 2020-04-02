@@ -177,6 +177,7 @@ module.exports.getMissions = (req, res) => {
     let obj = {
       companyId
     };
+    console.log("obj::::>",obj)
     const result = await contract.submitTransaction(
       "getMissions",
       JSON.stringify({ obj })
