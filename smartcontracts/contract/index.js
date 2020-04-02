@@ -4,20 +4,19 @@
 # SPDX-License-Identifier: Apache-2.0
 */
 
-const shim = require('fabric-shim');
-const util = require('util');
+const shim = require("fabric-shim");
+const util = require("util");
 
 var ABstore = class {
-
   // Initialize the chaincode
   async Init(stub) {
-    console.info('========= ABstore Init =========');
+    console.info("========= ABstore Init =========");
     let ret = stub.getFunctionAndParameters();
     console.info(ret);
     let args = ret.params;
     // initialise only if 4 parameters passed.
     if (args.length != 4) {
-      return shim.error('Incorrect number of arguments. Expecting 4');
+      return shim.error("Incorrect number of arguments. Expecting 4");
     }
 
     let A = args[0];
@@ -25,8 +24,11 @@ var ABstore = class {
     let Aval = args[1];
     let Bval = args[3];
 
-    if (typeof parseInt(Aval) !== 'number' || typeof parseInt(Bval) !== 'number') {
-      return shim.error('Expecting integer value for asset holding');
+    if (
+      typeof parseInt(Aval) !== "number" ||
+      typeof parseInt(Bval) !== "number"
+    ) {
+      return shim.error("Expecting integer value for asset holding");
     }
 
     try {
@@ -47,7 +49,7 @@ var ABstore = class {
     console.info(ret);
     let method = this[ret.fcn];
     if (!method) {
-      console.log('no method of name:' + ret.fcn + ' found');
+      console.log("no method of name:" + ret.fcn + " found");
       return shim.success();
     }
     try {
@@ -61,7 +63,7 @@ var ABstore = class {
 
   async invoke(stub, args) {
     if (args.length != 2) {
-      throw new Error('Incorrect number of arguments. Expecting 2');
+      throw new Error("Incorrect number of arguments. Expecting 2");
     }
 
     // await stub.putState("Hi", JSON.stringify({a:"Hi there"}));
@@ -71,35 +73,98 @@ var ABstore = class {
     let A = args[0];
     let B = args[1];
     if (!A || !B) {
-      throw new Error('2 arguments needed');
+      throw new Error("2 arguments needed");
     }
 
     await stub.putState(A, B);
-
   }
 
   async userCreate(stub, args) {
     if (args.length != 2) {
-      throw new Error('Incorrect number of arguments. Expecting 2');
+      throw new Error("Incorrect number of arguments. Expecting 2");
     }
-
-    // await stub.putState("Hi", JSON.stringify({a:"Hi there"}));
-    // let tes = await stub.getState("Hi");
-    // console.log(tes.toString());
 
     let A = args[0];
     let B = args[1];
     if (!A || !B) {
-      throw new Error('2 arguments needed');
+      throw new Error("2 arguments needed");
     }
 
+    await stub.putState(A, B);
+  }
+
+  async companyCreate(stub, args) {
+    if (args.length != 2) {
+      throw new Error("Incorrect number of arguments. Expecting 2");
+    }
+
+    let A = args[0];
+    let B = args[1];
+    if (!A || !B) {
+      throw new Error("2 arguments needed");
+    }
+
+    await stub.putState(A, B);
+  }
+
+  async missionCreate(stub, args) {
+    if (args.length != 2) {
+      throw new Error("Incorrect number of arguments. Expecting 2");
+    }
+    let A = args[0];
+    let B = args[1];
+    let json = JSON.parse(B);
+    console.log("incoming parsed json", json)
+    if (json.type == "cross") {
+      let {
+        companyId,
+        guestCompanyId,
+        missionName,
+        tokensLimit,
+        type,
+        date
+      } = json;
+      // Update local company missions array
+      let companyBuffer = await stub.getState(companyId);
+      let company = companyBuffer.toString();
+      console.log("company::>",company);
+      let updatedCompany = { ...company.missions.push(A) };
+      console.log("updated company::>",updatedCompany);
+      // Put company with missons updated
+      await stub.putState(companyId, updatedCompany);
+
+      // Update guest company guest-missions array
+      let guestCompanyBuffer = await stub.getState(guestCompanyId);
+      let guestCompany = guestCompanyBuffer.toString();
+      console.log("guest company::>",guestCompany);
+      let updatedGuestCompany = { ...guestCompany.guestMissions.push(A) };
+      console.log("guest updated company::>",updatedGuestCompany);
+      // Put company with missons updated
+      await stub.putState(guestCompanyId, updatedGuestCompany);
+    } else {
+      let { companyId, missionName, tokensLimit, type, date } = json;
+      // Update local company missions array
+      let companyBuffer = await stub.getState(companyId);
+      let company = companyBuffer.toString();
+      console.log("company::>",company);
+      let updatedCompany = { ...company.missions.push(A) };
+      console.log("updated company::>",updatedCompany);
+      // Put company with missons updated
+      await stub.putState(companyId, updatedCompany);
+    }
+
+    if (!A || !B) {
+      throw new Error("2 arguments needed");
+    }
+
+    // Put mission record
     await stub.putState(A, B);
   }
 
   // Deletes an entity from state
   async delete(stub, args) {
     if (args.length != 1) {
-      throw new Error('Incorrect number of arguments. Expecting 1');
+      throw new Error("Incorrect number of arguments. Expecting 1");
     }
 
     let A = args[0];
@@ -111,7 +176,9 @@ var ABstore = class {
   // query callback representing the query of a chaincode
   async query(stub, args) {
     if (args.length != 1) {
-      throw new Error('Incorrect number of arguments. Expecting name of the person to query')
+      throw new Error(
+        "Incorrect number of arguments. Expecting name of the person to query"
+      );
     }
 
     let jsonResp = {};
@@ -120,19 +187,18 @@ var ABstore = class {
     // Get the state from the ledger
     let Avalbytes = await stub.getState(A);
     if (!Avalbytes) {
-      jsonResp.error = 'Failed to get state for ' + A;
+      jsonResp.error = "Failed to get state for " + A;
       throw new Error(JSON.stringify(jsonResp));
     }
 
     jsonResp.name = A;
     jsonResp.amount = Avalbytes.toString();
-    console.info('Query Response:');
+    console.info("Query Response:");
     console.info(jsonResp);
     return Avalbytes;
   }
 };
 
-console.log('>>>>>>>>start');
+console.log(">>>>>>>>start");
 
 shim.start(new ABstore());
-

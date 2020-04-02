@@ -74,43 +74,79 @@ module.exports.userCreate = (req, res) => {
         JSON.stringify(obj)
       );
       console.log(result);
-      //  let response = JSON.parse(result.toString('utf-8'));
-      //console.log(response);
     } catch (err) {
       console.log(err);
     }
 
-    res.status(200).json({...obj,key});
+    res.status(200).json({ ...obj, key });
   });
 };
 
 module.exports.companyCreate = (req, res) => {
   console.log(req.body);
+  let { name } = req.body;
   return getGateway.then(async ({ gateway, network }) => {
     const contract = network.getContract("fabcar");
-    // try{
-    //     const result = await contract.submitTransaction('invoke', bId, JSON.stringify(obj));
-    //    console.log(result);
-    //   //  let response = JSON.parse(result.toString('utf-8'));
-    // //console.log(response);
-    // }catch(err){console.log(err)}
+    let key = uuidv4();
+    let obj = {
+      name,
+      missions: [],
+      guestMissions: []
+    };
+    try {
+      const result = await contract.submitTransaction(
+        "companyCreate",
+        key,
+        JSON.stringify(obj)
+      );
+      console.log(result);
+    } catch (err) {
+      console.log(err);
+    }
 
-    res.status(200).json("companyCreate");
+    res.status(200).json({ ...obj, key });
   });
 };
 
 module.exports.missionCreate = (req, res) => {
   console.log(req.body);
+  let { companyId, missionName, tokensLimit, type } = req.body;
   return getGateway.then(async ({ gateway, network }) => {
     const contract = network.getContract("fabcar");
-    // try{
-    //     const result = await contract.submitTransaction('invoke', bId, JSON.stringify(obj));
-    //    console.log(result);
-    //   //  let response = JSON.parse(result.toString('utf-8'));
-    // //console.log(response);
-    // }catch(err){console.log(err)}
+    let key = uuidv4();
+    let obj = undefined;
+    if (type == "cross") {
+      obj = {
+        companyId,
+        guestCompanyId: req.body.guestCompanyId,
+        missionName,
+        tokensLimit,
+        type,
+        date: Date(Date.now())
+      };
+    } else if (type == "self") {
+      obj = {
+        companyId,
+        missionName,
+        tokensLimit,
+        type,
+        date: Date(Date.now())
+      };
+    } else {
+      res.status(500).json({ status: "error" });
+    }
+    try {
+      const result = await contract.submitTransaction(
+        "missionCreate",
+        key,
+        JSON.stringify(obj)
+      );
+      console.log(result);
+    } catch (err) {
+      console.log(err);
+    }
 
-    res.status(200).json("missionCreate");
+    res.status(200).json({ ...obj, key });
   });
 };
 
