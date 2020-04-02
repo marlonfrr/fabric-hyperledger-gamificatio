@@ -185,8 +185,9 @@ var ABstore = class {
     companyMissions.map(async (v, i) => {
       let missionBuffer = await stub.getState(v);
       let mission = JSON.parse(missionBuffer.toString());
-      ret.push(mission);
+      ret.push({mission:"test"});
     });
+    ret.push({missionoo:"aa"});
     return ret;
   }
 
