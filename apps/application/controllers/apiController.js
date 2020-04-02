@@ -116,6 +116,9 @@ module.exports.missionCreate = (req, res) => {
     let key = uuidv4();
     let obj = undefined;
     if (type == "cross") {
+      console.log("-----------------------------------------")
+      console.log("cross")
+      console.log("-----------------------------------------")
       obj = {
         companyId,
         guestCompanyId: req.body.guestCompanyId,
@@ -136,7 +139,9 @@ module.exports.missionCreate = (req, res) => {
         date: Date(Date.now())
       };
     } else {
+      console.log("-----------------------------------------")
       console.log("Ningún tipo (apiController.js)")
+      console.log("-----------------------------------------")
       res.status(500).json({ status: "error" });
     }
     try {
@@ -147,7 +152,7 @@ module.exports.missionCreate = (req, res) => {
       );
       console.log(result);
     } catch (err) {
-      console.log(err);
+      console.log("Failed submiting transaction to contract",err);
     }
 
     res.status(200).json({ ...obj, key });
