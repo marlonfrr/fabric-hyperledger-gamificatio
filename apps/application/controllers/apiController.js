@@ -180,7 +180,7 @@ module.exports.getMissions = (req, res) => {
     console.log("obj::::>",obj)
     const result = await contract.submitTransaction(
       "getMissions",
-      JSON.stringify({ obj })
+      JSON.stringify(obj)
     );
     console.log("result in controller:::>", result.toString())
     let response = result.toString();
