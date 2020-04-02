@@ -182,7 +182,7 @@ module.exports.getMissions = (req, res) => {
       "getMissions",
       JSON.stringify({ obj })
     );
-    console.log("result in controller:::>", result)
+    console.log("result in controller:::>", result.toString())
     let response = result.toString();
     res.status(200).send(response);
   });
