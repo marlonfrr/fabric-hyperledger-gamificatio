@@ -11,7 +11,7 @@ module.exports.auth = (req, res) => {
   //     req.body.transactionId
   //   );
   //   let response = JSON.parse(result.toString());
-  res.status(200).json({data:{names: "Gryn"}});
+  res.status(200).json({names: "Gryn"});
   // });
 };
 
