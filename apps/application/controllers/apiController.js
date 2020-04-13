@@ -105,6 +105,7 @@ module.exports.companyCreate = (req, res) => {
       missions: [],
       guestMissions: [],
       rewards: [],
+      companyId: key
     };
     try {
       const result = await contract.submitTransaction(

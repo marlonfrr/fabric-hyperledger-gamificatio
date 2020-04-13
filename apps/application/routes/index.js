@@ -12,7 +12,7 @@ router.use('/v1/api', apiRouter);
 router.post('/v1/transaction/create', apiRouter)
 router.use('/api-docs', swaggerUi.serve);
 router.get('/api-docs', swaggerUi.setup(swaggerDocument));
-router.get('/v1/key/', apiRouter);
+router.post('/v1/key/', apiRouter);
 
 // Simple login
 router.post('/v1/auth', apiRouter)

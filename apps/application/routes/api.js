@@ -6,7 +6,7 @@ const apiController = require('../controllers/apiController');
 
 router.post('/v1/auth', apiController.auth)
 
-router.get('/v1/key/', apiController.getTransaction);
+router.post('/v1/key/', apiController.getTransaction);
 router.post('/v1/transaction/create', apiController.postTransaction);
 
 router.post('/v1/getMissions', apiController.getMissions);
