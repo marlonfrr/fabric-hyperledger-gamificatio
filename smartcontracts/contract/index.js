@@ -122,7 +122,7 @@ var ABstore = class {
         missionName,
         tokensLimit,
         type,
-        date
+        date,
       } = json;
       // Update local company missions array
       let companyBuffer = await stub.getState(companyId);
@@ -179,22 +179,34 @@ var ABstore = class {
     let companyBuffer = await stub.getState(companyId);
     let company = JSON.parse(companyBuffer.toString());
     console.log("company::>", company);
-    var obj = {}
-    return company.missions.map(async (v, i) => {
-      console.log("Valuee:::>", v);
-      let missionBuffer = await stub.getState(v);
-      console.log("Mission buffer:::>", missionBuffer);
-      let mission = JSON.parse(missionBuffer.toString());
-      console.log("missionnnnn", mission);
-      let ret = [];
-      ret.push(mission);
-      console.log("ret", ret);
-      obj = { result: ret };
-    console.log("IN OBJ",obj)
-    return obj;
-    });
+    // var obj = {}
+    // return company.missions.map(async (v, i) => {
+    //   console.log("Valuee:::>", v);
+    //   let missionBuffer = await stub.getState(v);
+    //   console.log("Mission buffer:::>", missionBuffer);
+    //   let mission = JSON.parse(missionBuffer.toString());
+    //   console.log("missionnnnn", mission);
+    //   let ret = [];
+    //   ret.push(mission);
+    //   console.log("ret", ret);
+    //   obj = { result: ret };
+    // console.log("IN OBJ",obj)
+    // return obj;
+    // });
     // console.log("OUT OBJ",obj)
     // return obj;
+
+    let obj = {};
+    let ret = [];
+    company.missions.map(async (v, i) => {
+      let missionBuffer = await stub.getState(v);
+      let mission = JSON.parse(missionBuffer.toString());
+      ret.push(mission);
+      console.log("iterating",ret)
+      // return obj;
+    });
+    obj = { result: ret };
+    return obj;
   }
 
   async rewardCreate(stub, args) {
@@ -251,7 +263,7 @@ var ABstore = class {
     let userBuffer = await stub.getState(userId);
     let user = JSON.parse(userBuffer.toString());
     console.log("user::>", user);
-    let missionIndex = user["enrolledMissions"].findIndex(value => {
+    let missionIndex = user["enrolledMissions"].findIndex((value) => {
       return value.missionId == missionId;
     });
     console.log("missionIndex::>", missionIndex);
