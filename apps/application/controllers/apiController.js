@@ -108,7 +108,8 @@ module.exports.companyCreate = (req, res) => {
     try {
       const result = await contract.submitTransaction(
         "companyCreate",
-        key,
+        //key,
+        "grin",
         JSON.stringify(obj)
       );
       console.log(result);
