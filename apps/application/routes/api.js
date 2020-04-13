@@ -4,7 +4,7 @@ const express = require('express');
 let router = express.Router();
 const apiController = require('../controllers/apiController');
 
-router.post('/vi/auth', apiController.auth)
+router.post('/v1/auth', apiController.auth)
 
 router.get('/v1/transaction/', apiController.getTransaction);
 router.post('/v1/transaction/create', apiController.postTransaction);

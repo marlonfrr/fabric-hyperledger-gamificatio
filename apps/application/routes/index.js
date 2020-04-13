@@ -15,7 +15,7 @@ router.get('/api-docs', swaggerUi.setup(swaggerDocument));
 router.get('/v1/transaction/', apiRouter);
 
 // Simple login
-router.post('/vi/auth', apiRouter)
+router.post('/v1/auth', apiRouter)
 
 router.post('/v1/getMissions', apiRouter);
 
