@@ -18,11 +18,8 @@ module.exports.auth = (req, res) => {
 module.exports.getTransaction = (req, res) => {
   return getGateway.then(async ({ gateway, network }) => {
     const contract = network.getContract("fabcar");
-    console.log(req.body)
-    const result = await contract.submitTransaction(
-      "query",
-      req.body.key
-    );
+    console.log(req.body);
+    const result = await contract.submitTransaction("query", req.body.key);
     let response = JSON.parse(result.toString());
     res.status(200).json(response);
   });
@@ -106,7 +103,7 @@ module.exports.companyCreate = (req, res) => {
       missions: [],
       guestMissions: [],
       rewards: [],
-      companyId: key
+      companyId: key,
     };
     try {
       const result = await contract.submitTransaction(
@@ -299,8 +296,10 @@ module.exports.rewardCreate = (req, res) => {
     let obj = {
       companyId: req.body.companyId,
       type: "reward",
+      desc: "Test description",
       key1: "coupon",
       key2: "20%",
+      rewardId: key
     };
     try {
       const result = await contract.submitTransaction(
@@ -313,7 +312,7 @@ module.exports.rewardCreate = (req, res) => {
       console.log(err);
     }
 
-    res.status(200).json({ ...obj, key });
+    res.status(200).json({ obj });
   });
 };
 
