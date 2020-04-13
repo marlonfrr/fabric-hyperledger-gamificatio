@@ -18,7 +18,7 @@ module.exports.auth = (req, res) => {
 module.exports.getTransaction = (req, res) => {
   return getGateway.then(async ({ gateway, network }) => {
     const contract = network.getContract("fabcar");
-    console.log(req.body.key)
+    console.log(req.body)
     const result = await contract.submitTransaction(
       "query",
       req.body.key
