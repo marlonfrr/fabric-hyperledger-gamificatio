@@ -202,10 +202,12 @@ var ABstore = class {
       let missionBuffer = await stub.getState(v);
       let mission = JSON.parse(missionBuffer.toString());
       ret.push(mission);
-      console.log("iterating",ret)
+      console.log("iterating", ret);
       // return obj;
     });
     obj = { result: ret };
+    console.log("RET", ret);
+    console.log("OBJ", obj);
     return obj;
   }
 
