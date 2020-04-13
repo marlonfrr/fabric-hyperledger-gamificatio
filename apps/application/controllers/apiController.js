@@ -116,7 +116,7 @@ module.exports.companyCreate = (req, res) => {
       console.log(err);
     }
 
-    res.status(200).json({ ...obj, key });
+    res.status(200).json(obj);
   });
 };
 
@@ -299,7 +299,7 @@ module.exports.rewardCreate = (req, res) => {
       desc: "Test description",
       key1: "coupon",
       key2: "20%",
-      rewardId: key
+      rewardId: key,
     };
     try {
       const result = await contract.submitTransaction(
@@ -312,7 +312,7 @@ module.exports.rewardCreate = (req, res) => {
       console.log(err);
     }
 
-    res.status(200).json({ obj });
+    res.status(200).json(obj);
   });
 };
 
