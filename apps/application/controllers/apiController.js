@@ -97,7 +97,7 @@ module.exports.companyCreate = (req, res) => {
   return getGateway.then(async ({ gateway, network }) => {
     const contract = network.getContract("fabcar");
     // let key = uuidv4();
-    let key = "grin";
+    let key = name;
     let obj = {
       name,
       missions: [],
