@@ -3,6 +3,18 @@
 const getGateway = require("../gateway/gateway");
 const uuidv4 = require("uuid/v4");
 
+module.exports.auth = (req, res) => {
+  // return getGateway.then(async ({ gateway, network }) => {
+  //   const contract = network.getContract("fabcar");
+  //   const result = await contract.submitTransaction(
+  //     "query",
+  //     req.body.transactionId
+  //   );
+  //   let response = JSON.parse(result.toString());
+  res.status(200).json({data:{names: "Gryn"}});
+  // });
+};
+
 module.exports.getTransaction = (req, res) => {
   return getGateway.then(async ({ gateway, network }) => {
     const contract = network.getContract("fabcar");
@@ -30,7 +42,7 @@ module.exports.postTransaction = (req, res) => {
       userId,
       sourceCompanyId,
       sourceCompanyName: "Grin",
-      points: "150"
+      points: "150",
     };
     const contract = network.getContract("fabcar");
     try {
@@ -64,7 +76,7 @@ module.exports.userCreate = (req, res) => {
       enrolledMissions: [],
       availableRewards: [],
       sendTransactions: [],
-      receivedTransactions: []
+      receivedTransactions: [],
     };
     try {
       const result = await contract.submitTransaction(
@@ -90,7 +102,7 @@ module.exports.companyCreate = (req, res) => {
     let obj = {
       name,
       missions: [],
-      guestMissions: []
+      guestMissions: [],
     };
     try {
       const result = await contract.submitTransaction(
@@ -115,7 +127,7 @@ module.exports.missionCreate = (req, res) => {
     tokensLimit,
     rewardId,
     type,
-    movementsRequired
+    movementsRequired,
   } = req.body;
   return getGateway.then(async ({ gateway, network }) => {
     const contract = network.getContract("fabcar");
@@ -133,7 +145,7 @@ module.exports.missionCreate = (req, res) => {
         tokensLimit,
         movementsRequired,
         type,
-        date: Date(Date.now())
+        date: Date(Date.now()),
       };
     } else if (type == "self") {
       console.log("-----------------------------------------");
@@ -145,7 +157,7 @@ module.exports.missionCreate = (req, res) => {
         rewardId,
         tokensLimit,
         type,
-        date: Date(Date.now())
+        date: Date(Date.now()),
       };
     } else {
       console.log("-----------------------------------------");
@@ -173,9 +185,9 @@ module.exports.getMissions = (req, res) => {
     const contract = network.getContract("fabcar");
     let { companyId } = req.body;
     let obj = {
-      companyId
+      companyId,
     };
-    console.log("obj::::>",obj)
+    console.log("obj::::>", obj);
     // const result = await contract.submitTransaction(
     //   "getMissions",
     //   JSON.stringify(obj)
@@ -183,89 +195,94 @@ module.exports.getMissions = (req, res) => {
     // console.log("result in controller:::>", result)
     // console.log("result in controller toString:::>", result.toString())
     let response = {
-      missions: [
+      missions: [
         {
-          "_id": "36503733-acb7-473b-b75a-90b8cfa353b6",
-          "_rev": "1-02bd2bea0cafc3229b772a572d318966",
-          "companyId": "c8ef0428-8507-477a-a67a-3aa1f07a4b79",
-          "date": "Thu Apr 02 2020 17:38:53 GMT+0000 (Coordinated Universal Time)",
-          "guestCompanyId": "a38f6556-bbdf-486f-ad13-6f526af8a3d4",
-          "missionName": "Test3cross",
-          "movementsRequired": 20,
-          "rewardId": "954942d8-19ed-4b24-b208-37cf9a80c2fa",
-          "tokensLimit": 1000,
-          "from":"muvo.png",
-          "to":"raver.png",
-          "reward":{
+          _id: "36503733-acb7-473b-b75a-90b8cfa353b6",
+          _rev: "1-02bd2bea0cafc3229b772a572d318966",
+          companyId: "c8ef0428-8507-477a-a67a-3aa1f07a4b79",
+          date:
+            "Thu Apr 02 2020 17:38:53 GMT+0000 (Coordinated Universal Time)",
+          guestCompanyId: "a38f6556-bbdf-486f-ad13-6f526af8a3d4",
+          missionName: "Test3cross",
+          movementsRequired: 20,
+          rewardId: "954942d8-19ed-4b24-b208-37cf9a80c2fa",
+          tokensLimit: 1000,
+          from: "muvo.png",
+          to: "raver.png",
+          reward: {
             desc: "Completa 5 viajes en Muvo y obtén 20% de descuento en Raver",
-            key1:"Cupón",
-            key2: "20%"
+            key1: "Cupón",
+            key2: "20%",
           },
-          "type": "cross",
-          "~version": "CgMBCgA="
+          type: "cross",
+          "~version": "CgMBCgA=",
         },
         {
-          "_id": "36503733-acb7-473b-b75a-90b8cfa353b6",
-          "_rev": "1-02bd2bea0cafc3229b772a572d318966",
-          "companyId": "c8ef0428-8507-477a-a67a-3aa1f07a4b79",
-          "date": "Thu Apr 02 2020 17:38:53 GMT+0000 (Coordinated Universal Time)",
-          "guestCompanyId": "a38f6556-bbdf-486f-ad13-6f526af8a3d4",
-          "missionName": "Test5cross",
-          "movementsRequired": 20,
-          "from":"grin.png",
-          "to":"raver.png",
-          "reward":{
-            desc: "Completa 4 viajes en Grin y obtén 1 entrada a un concierto en Raver",
-            key1:"Entrada gratis",
-            key2: "Concierto X"
+          _id: "36503733-acb7-473b-b75a-90b8cfa353b6",
+          _rev: "1-02bd2bea0cafc3229b772a572d318966",
+          companyId: "c8ef0428-8507-477a-a67a-3aa1f07a4b79",
+          date:
+            "Thu Apr 02 2020 17:38:53 GMT+0000 (Coordinated Universal Time)",
+          guestCompanyId: "a38f6556-bbdf-486f-ad13-6f526af8a3d4",
+          missionName: "Test5cross",
+          movementsRequired: 20,
+          from: "grin.png",
+          to: "raver.png",
+          reward: {
+            desc:
+              "Completa 4 viajes en Grin y obtén 1 entrada a un concierto en Raver",
+            key1: "Entrada gratis",
+            key2: "Concierto X",
           },
-          "rewardId": "954942d8-19ed-4b24-b208-37cf9a80c2fa",
-          "tokensLimit": 1000,
-          "type": "cross",
-          "~version": "CgMBCgA="
+          rewardId: "954942d8-19ed-4b24-b208-37cf9a80c2fa",
+          tokensLimit: 1000,
+          type: "cross",
+          "~version": "CgMBCgA=",
         },
         {
-          "_id": "36503733-acb7-473b-b75a-90b8cfa353b6",
-          "_rev": "1-02bd2bea0cafc3229b772a572d318966",
-          "companyId": "c8ef0428-8507-477a-a67a-3aa1f07a4b79",
-          "date": "Thu Apr 02 2020 17:38:53 GMT+0000 (Coordinated Universal Time)",
-          "guestCompanyId": "a38f6556-bbdf-486f-ad13-6f526af8a3d4",
-          "missionName": "EnlaU",
-          "movementsRequired": 20,
-          "from":"raver.png",
-          "to":"enlau.png",
-          "reward":{
+          _id: "36503733-acb7-473b-b75a-90b8cfa353b6",
+          _rev: "1-02bd2bea0cafc3229b772a572d318966",
+          companyId: "c8ef0428-8507-477a-a67a-3aa1f07a4b79",
+          date:
+            "Thu Apr 02 2020 17:38:53 GMT+0000 (Coordinated Universal Time)",
+          guestCompanyId: "a38f6556-bbdf-486f-ad13-6f526af8a3d4",
+          missionName: "EnlaU",
+          movementsRequired: 20,
+          from: "raver.png",
+          to: "enlau.png",
+          reward: {
             desc: "Compra 1 entrada y obtén domicilio gratis hasta 5.000",
-            key1:"Domicilio gratis",
-            key2: "5.0000"
+            key1: "Domicilio gratis",
+            key2: "5.0000",
           },
-          "rewardId": "954942d8-19ed-4b24-b208-37cf9a80c2fa",
-          "tokensLimit": 1000,
-          "type": "cross",
-          "~version": "CgMBCgA="
+          rewardId: "954942d8-19ed-4b24-b208-37cf9a80c2fa",
+          tokensLimit: 1000,
+          type: "cross",
+          "~version": "CgMBCgA=",
         },
         {
-          "_id": "36503733-acb7-473b-b75a-90b8cfa353b6",
-          "_rev": "1-02bd2bea0cafc3229b772a572d318966",
-          "companyId": "c8ef0428-8507-477a-a67a-3aa1f07a4b79",
-          "date": "Thu Apr 02 2020 17:38:53 GMT+0000 (Coordinated Universal Time)",
-          "guestCompanyId": "a38f6556-bbdf-486f-ad13-6f526af8a3d4",
-          "missionName": "Beat",
-          "movementsRequired": 20,
-          "from":"raver.png",
-          "to":"beat.png",
-          "reward":{
+          _id: "36503733-acb7-473b-b75a-90b8cfa353b6",
+          _rev: "1-02bd2bea0cafc3229b772a572d318966",
+          companyId: "c8ef0428-8507-477a-a67a-3aa1f07a4b79",
+          date:
+            "Thu Apr 02 2020 17:38:53 GMT+0000 (Coordinated Universal Time)",
+          guestCompanyId: "a38f6556-bbdf-486f-ad13-6f526af8a3d4",
+          missionName: "Beat",
+          movementsRequired: 20,
+          from: "raver.png",
+          to: "beat.png",
+          reward: {
             desc: "Compra 1 entrada y recibe un viaje gratis en Beat",
-            key1:"Viaje gratis",
-            key2: "10.000"
+            key1: "Viaje gratis",
+            key2: "10.000",
           },
-          "rewardId": "954942d8-19ed-4b24-b208-37cf9a80c2fa",
-          "tokensLimit": 1000,
-          "type": "cross",
-          "~version": "CgMBCgA="
-        }
-      ]
-    }
+          rewardId: "954942d8-19ed-4b24-b208-37cf9a80c2fa",
+          tokensLimit: 1000,
+          type: "cross",
+          "~version": "CgMBCgA=",
+        },
+      ],
+    };
     res.status(200).json(response);
   });
 };
@@ -279,7 +296,7 @@ module.exports.rewardCreate = (req, res) => {
       companyId: req.body.companyId,
       type: "reward",
       key1: "coupon",
-      key2: "20%"
+      key2: "20%",
     };
     try {
       const result = await contract.submitTransaction(
@@ -303,7 +320,7 @@ module.exports.missionEnroll = (req, res) => {
     let key = uuidv4();
     let obj = {
       userId: req.body.userId,
-      missionId: req.body.missionId
+      missionId: req.body.missionId,
     };
     try {
       const result = await contract.submitTransaction(
@@ -327,7 +344,7 @@ module.exports.performMovement = (req, res) => {
     let key = uuidv4();
     let obj = {
       userId: req.body.userId,
-      missionId: req.body.missionId
+      missionId: req.body.missionId,
     };
     try {
       const result = await contract.submitTransaction(
