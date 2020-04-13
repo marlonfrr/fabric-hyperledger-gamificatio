@@ -11,7 +11,7 @@ module.exports.auth = (req, res) => {
   //     req.body.transactionId
   //   );
   //   let response = JSON.parse(result.toString());
-  res.status(200).json({names: "Gryn"});
+  res.status(200).json({ names: "Grin" });
   // });
 };
 
@@ -20,7 +20,7 @@ module.exports.getTransaction = (req, res) => {
     const contract = network.getContract("fabcar");
     const result = await contract.submitTransaction(
       "query",
-      req.body.transactionId
+      req.body.key
     );
     let response = JSON.parse(result.toString());
     res.status(200).json(response);
@@ -98,18 +98,18 @@ module.exports.companyCreate = (req, res) => {
   let { name } = req.body;
   return getGateway.then(async ({ gateway, network }) => {
     const contract = network.getContract("fabcar");
-    let key = uuidv4();
+    // let key = uuidv4();
+    let key = "grin";
     let obj = {
       name,
       missions: [],
       guestMissions: [],
-      rewards: []
+      rewards: [],
     };
     try {
       const result = await contract.submitTransaction(
         "companyCreate",
-        //key,
-        "grin",
+        key,
         JSON.stringify(obj)
       );
       console.log(result);
