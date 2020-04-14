@@ -198,13 +198,16 @@ var ABstore = class {
 
     let obj = {};
     let ret = [];
+    console.log("hola");
     ret = company.missions.map(async (v, i) => {
       let missionBuffer = await stub.getState(v);
       let mission = JSON.parse(missionBuffer.toString());
+      console.log(mission);
       return mission;
       // ret.push(mission);
       // console.log("iterating", ret); // acá si entra el objeto
     });
+    console.log("gonorress")
     obj = { result: ret };
     console.log("RET", ret); // VACÍO :(((
     console.log("OBJ", obj); // VACÍO :(((
