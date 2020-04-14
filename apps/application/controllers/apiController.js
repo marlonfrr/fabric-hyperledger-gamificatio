@@ -288,6 +288,22 @@ module.exports.getMissions = (req, res) => {
       // };
   });
 };
+module.exports.getRewards = (req, res) => {
+  return getGateway.then(async ({ gateway, network }) => {
+    const contract = network.getContract("fabcar");
+    let { companyId } = req.body;
+    let obj = {
+      companyId,
+    };
+    console.log("obj::::>", obj);
+    const result = await contract.submitTransaction(
+      "getRewards",
+      JSON.stringify(obj)
+    );
+    let retu = JSON.parse(result.toString())
+    res.status(200).json(retu);
+  });
+};
 
 module.exports.rewardCreate = (req, res) => {
   console.log(req.body);
