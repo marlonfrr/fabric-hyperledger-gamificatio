@@ -178,39 +178,41 @@ var ABstore = class {
     let { companyId } = json;
     let companyBuffer = await stub.getState(companyId);
     let company = JSON.parse(companyBuffer.toString());
-    console.log("company::>", company);
-    // var obj = {}
-    // return company.missions.map(async (v, i) => {
-    //   console.log("Valuee:::>", v);
-    //   let missionBuffer = await stub.getState(v);
-    //   console.log("Mission buffer:::>", missionBuffer);
-    //   let mission = JSON.parse(missionBuffer.toString());
-    //   console.log("missionnnnn", mission);
-    //   let ret = [];
-    //   ret.push(mission);
-    //   console.log("ret", ret);
-    //   obj = { result: ret };
-    // console.log("IN OBJ",obj)
-    // return obj;
-    // });
-    // console.log("OUT OBJ",obj)
-    // return obj;
-
     let obj = {};
     let ret = [];
-    console.log("1");
     for (let i = 0; i < company.missions.length; i++) {
       const v = company.missions[i];
       let missionBuffer = await stub.getState(v);
       let mission = JSON.parse(missionBuffer.toString());
-      console.log("2");
       ret.push(mission);
     }
-    console.log("3");
     obj = { result: ret };
-    console.log("RET", ret); // VACÍO :(((
-    console.log("OBJ", obj); // VACÍO :(((
-    let buf = Buffer.from(JSON.stringify(obj))
+    let buf = Buffer.from(JSON.stringify(obj));
+    return buf;
+  }
+
+  async getRewards(stub, args) {
+    if (args.length != 1) {
+      throw new Error("Incorrect number of arguments. Expecting 1");
+    }
+    let A = args[0];
+    if (!A) {
+      throw new Error("1 argument needed");
+    }
+    let json = JSON.parse(A);
+    let { companyId } = json;
+    let companyBuffer = await stub.getState(companyId);
+    let company = JSON.parse(companyBuffer.toString());
+    let obj = {};
+    let ret = [];
+    for (let i = 0; i < company.rewards.length; i++) {
+      const v = company.rewards[i];
+      let rewardBuffer = await stub.getState(v);
+      let reward = JSON.parse(rewardBuffer.toString());
+      ret.push(reward);
+    }
+    obj = { result: ret };
+    let buf = Buffer.from(JSON.stringify(obj));
     return buf;
   }
 
