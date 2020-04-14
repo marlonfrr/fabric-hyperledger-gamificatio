@@ -10,6 +10,7 @@ router.post('/v1/key/', apiController.getTransaction);
 router.post('/v1/transaction/create', apiController.postTransaction);
 
 router.post('/v1/getMissions', apiController.getMissions);
+router.post('/v1/getRewards', apiController.getMissions);
 
 router.post('/v1/userCreate', apiController.userCreate);
 router.post('/v1/companyCreate', apiController.companyCreate);
