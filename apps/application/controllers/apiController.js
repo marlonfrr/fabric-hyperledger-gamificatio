@@ -193,9 +193,10 @@ module.exports.getMissions = (req, res) => {
       "getMissions",
       JSON.stringify(obj)
     );
+    let retu = JSON.parse(result.toString())
     console.log("result in controller:::>", result);
-    console.log("result in controller toString:::>", result.toString());
-    res.status(200).json(result.toString());
+    console.log("result in controller toString:::>", retu);
+    res.status(200).json(retu);
       // let response = {
       //   missions: [
       //     {
