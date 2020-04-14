@@ -210,7 +210,8 @@ var ABstore = class {
     obj = { result: ret };
     console.log("RET", ret); // VACÍO :(((
     console.log("OBJ", obj); // VACÍO :(((
-    return obj;
+    let buf = Buffer.from(JSON.stringify(obj))
+    return buf;
   }
 
   async rewardCreate(stub, args) {
