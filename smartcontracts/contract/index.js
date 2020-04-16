@@ -311,6 +311,9 @@ var ABstore = class {
     userTo.receivedTransactions.push(transactionId);
     userTo.tokens += tokens;
     await stub.putState(userIdTo, JSON.stringify(userTo));
+
+    // Save transaction
+    await stub.putState(A, B);
   }
 
   // Deletes an entity from state
