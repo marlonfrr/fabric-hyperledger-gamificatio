@@ -154,6 +154,7 @@ module.exports.missionCreate = (req, res) => {
         movementsRequired,
         type,
         date: new Date().getTime(),
+        missionId: key
       };
     } else if (type == "self") {
       console.log("-----------------------------------------");
