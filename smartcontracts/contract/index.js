@@ -124,12 +124,7 @@ var ABstore = class {
         type,
         date,
       } = json;
-      let {
-        rewardId,
-        description,
-        key1,
-        key2
-      } = json.reward;
+      let { rewardId, description, key1, key2 } = json.reward;
 
       // Update local company missions array
       let companyBuffer = await stub.getState(companyId);
@@ -150,7 +145,7 @@ var ABstore = class {
       // Put company with missons updated
       await stub.putState(guestCompanyId, JSON.stringify(guestCompany));
       // Create reward
-      await stub.putState(rewardId, JSON.stringify(json.reward))
+      await stub.putState(rewardId, JSON.stringify(json.reward));
     } else if (json.type == "self") {
       let { companyId, missionName, tokensLimit, type, date } = json;
       // Update local company missions array
@@ -288,6 +283,34 @@ var ABstore = class {
     console.log("user id to put", userId);
     // Put company with missons updated
     await stub.putState(userId, JSON.stringify(user));
+  }
+
+  async tokensSend(stub, args) {
+    if (args.length != 2) {
+      throw new Error("Incorrect number of arguments. Expecting 2");
+    }
+    let A = args[0];
+    let B = args[1];
+    if (!A || !B) {
+      throw new Error("2 arguments needed");
+    }
+    let json = JSON.parse(B);
+    let { userIdFrom, userIdTo, tokens, transactionId } = json;
+    // Push sent transaction id to from user
+    let userBufferFrom = await stub.getState(userIdFrom);
+    let userFrom = JSON.parse(userBufferFrom.toString());
+    console.log("user::>", userFrom);
+    userFrom.sendTransactions.push(transactionId);
+    userFrom.tokens -= tokens;
+    await stub.putState(userIdFrom, JSON.stringify(userFrom));
+
+    // Push received transaction id to from user
+    let userBufferTo = await stub.getState(userIdTo);
+    let userTo = JSON.parse(userBufferTo.toString());
+    console.log("user::>", userTo);
+    userTo.receivedTransactions.push(transactionId);
+    userTo.tokens += tokens;
+    await stub.putState(userIdTo, JSON.stringify(userTo));
   }
 
   // Deletes an entity from state

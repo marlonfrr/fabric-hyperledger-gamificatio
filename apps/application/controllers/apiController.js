@@ -148,13 +148,13 @@ module.exports.missionCreate = (req, res) => {
           rewardId: uuidv4(),
           description,
           key1,
-          key2
+          key2,
         },
         tokensLimit,
         movementsRequired,
         type,
         date: new Date().getTime(),
-        missionId: key
+        missionId: key,
       };
     } else if (type == "self") {
       console.log("-----------------------------------------");
@@ -423,13 +423,23 @@ module.exports.tokensSend = (req, res) => {
   console.log(req.body);
   return getGateway.then(async ({ gateway, network }) => {
     const contract = network.getContract("fabcar");
-    // try{
-    //     const result = await contract.submitTransaction('invoke', bId, JSON.stringify(obj));
-    //    console.log(result);
-    //   //  let response = JSON.parse(result.toString('utf-8'));
-    // //console.log(response);
-    // }catch(err){console.log(err)}
-
-    res.status(200).json("tokensSend");
+    let key = uuidv4();
+    let obj = {
+      userIdFrom: req.body.userIdFrom,
+      userIdTo: req.body.userIdTo,
+      tokens: req.body.tokens,
+      transactionId: key,
+    };
+    try {
+      const result = await contract.submitTransaction(
+        "tokensSend",
+        key,
+        JSON.stringify(obj)
+      );
+      console.log(result);
+    } catch (err) {
+      console.log(err);
+    }
+    res.status(200).json(obj);
   });
 };
