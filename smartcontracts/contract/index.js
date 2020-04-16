@@ -124,6 +124,13 @@ var ABstore = class {
         type,
         date,
       } = json;
+      let {
+        rewardId,
+        description,
+        key1,
+        key2
+      } = json.reward;
+
       // Update local company missions array
       let companyBuffer = await stub.getState(companyId);
       let company = JSON.parse(companyBuffer.toString());
@@ -142,6 +149,8 @@ var ABstore = class {
       console.log("updated company", guestCompany);
       // Put company with missons updated
       await stub.putState(guestCompanyId, JSON.stringify(guestCompany));
+      // Create reward
+      await stub.putState(rewardId, JSON.stringify(json.reward))
     } else if (json.type == "self") {
       let { companyId, missionName, tokensLimit, type, date } = json;
       // Update local company missions array
@@ -191,30 +200,30 @@ var ABstore = class {
     return buf;
   }
 
-  async getRewards(stub, args) {
-    if (args.length != 1) {
-      throw new Error("Incorrect number of arguments. Expecting 1");
-    }
-    let A = args[0];
-    if (!A) {
-      throw new Error("1 argument needed");
-    }
-    let json = JSON.parse(A);
-    let { companyId } = json;
-    let companyBuffer = await stub.getState(companyId);
-    let company = JSON.parse(companyBuffer.toString());
-    let obj = {};
-    let ret = [];
-    for (let i = 0; i < company.rewards.length; i++) {
-      const v = company.rewards[i];
-      let rewardBuffer = await stub.getState(v);
-      let reward = JSON.parse(rewardBuffer.toString());
-      ret.push(reward);
-    }
-    obj = { result: ret };
-    let buf = Buffer.from(JSON.stringify(obj));
-    return buf;
-  }
+  // async getRewards(stub, args) {
+  //   if (args.length != 1) {
+  //     throw new Error("Incorrect number of arguments. Expecting 1");
+  //   }
+  //   let A = args[0];
+  //   if (!A) {
+  //     throw new Error("1 argument needed");
+  //   }
+  //   let json = JSON.parse(A);
+  //   let { companyId } = json;
+  //   let companyBuffer = await stub.getState(companyId);
+  //   let company = JSON.parse(companyBuffer.toString());
+  //   let obj = {};
+  //   let ret = [];
+  //   for (let i = 0; i < company.rewards.length; i++) {
+  //     const v = company.rewards[i];
+  //     let rewardBuffer = await stub.getState(v);
+  //     let reward = JSON.parse(rewardBuffer.toString());
+  //     ret.push(reward);
+  //   }
+  //   obj = { result: ret };
+  //   let buf = Buffer.from(JSON.stringify(obj));
+  //   return buf;
+  // }
 
   async rewardCreate(stub, args) {
     if (args.length != 2) {

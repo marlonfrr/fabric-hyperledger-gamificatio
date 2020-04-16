@@ -18,7 +18,7 @@ router.post('/v1/key/', apiRouter);
 router.post('/v1/auth', apiRouter)
 
 router.post('/v1/getMissions', apiRouter);
-router.post('/v1/getRewards', apiRouter);
+// router.post('/v1/getRewards', apiRouter);
 
 router.post('/v1/userCreate', apiRouter);
 router.post('/v1/companyCreate', apiRouter);

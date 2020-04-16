@@ -126,9 +126,11 @@ module.exports.missionCreate = (req, res) => {
     companyId,
     missionName,
     tokensLimit,
-    rewardId,
     type,
     movementsRequired,
+    key1,
+    key2,
+    description,
   } = req.body;
   return getGateway.then(async ({ gateway, network }) => {
     const contract = network.getContract("fabcar");
@@ -142,11 +144,16 @@ module.exports.missionCreate = (req, res) => {
         companyId,
         guestCompanyId: req.body.guestCompanyId,
         missionName,
-        rewardId,
+        reward: {
+          rewardId: uuidv4(),
+          description,
+          key1,
+          key2
+        },
         tokensLimit,
         movementsRequired,
         type,
-        date: Date(Date.now()),
+        date: new Date().getTime(),
       };
     } else if (type == "self") {
       console.log("-----------------------------------------");
@@ -158,7 +165,7 @@ module.exports.missionCreate = (req, res) => {
         rewardId,
         tokensLimit,
         type,
-        date: Date(Date.now()),
+        date: new Date().getTime(),
       };
     } else {
       console.log("-----------------------------------------");
@@ -193,117 +200,117 @@ module.exports.getMissions = (req, res) => {
       "getMissions",
       JSON.stringify(obj)
     );
-    let retu = JSON.parse(result.toString())
+    let retu = JSON.parse(result.toString());
     console.log("result in controller:::>", result);
     console.log("result in controller toString:::>", retu);
     res.status(200).json(retu);
-      // let response = {
-      //   missions: [
-      //     {
-      //       _id: "36503733-acb7-473b-b75a-90b8cfa353b6",
-      //       _rev: "1-02bd2bea0cafc3229b772a572d318966",
-      //       companyId: "c8ef0428-8507-477a-a67a-3aa1f07a4b79",
-      //       date:
-      //         "Thu Apr 02 2020 17:38:53 GMT+0000 (Coordinated Universal Time)",
-      //       guestCompanyId: "a38f6556-bbdf-486f-ad13-6f526af8a3d4",
-      //       missionName: "Test3cross",
-      //       movementsRequired: 20,
-      //       rewardId: "954942d8-19ed-4b24-b208-37cf9a80c2fa",
-      //       tokensLimit: 1000,
-      //       from: "muvo.png",
-      //       to: "raver.png",
-      //       reward: {
-      //         desc: "Completa 5 viajes en Muvo y obtén 20% de descuento en Raver",
-      //         key1: "Cupón",
-      //         key2: "20%",
-      //       },
-      //       type: "cross",
-      //       "~version": "CgMBCgA=",
-      //     },
-      //     {
-      //       _id: "36503733-acb7-473b-b75a-90b8cfa353b6",
-      //       _rev: "1-02bd2bea0cafc3229b772a572d318966",
-      //       companyId: "c8ef0428-8507-477a-a67a-3aa1f07a4b79",
-      //       date:
-      //         "Thu Apr 02 2020 17:38:53 GMT+0000 (Coordinated Universal Time)",
-      //       guestCompanyId: "a38f6556-bbdf-486f-ad13-6f526af8a3d4",
-      //       missionName: "Test5cross",
-      //       movementsRequired: 20,
-      //       from: "grin.png",
-      //       to: "raver.png",
-      //       reward: {
-      //         desc:
-      //           "Completa 4 viajes en Grin y obtén 1 entrada a un concierto en Raver",
-      //         key1: "Entrada gratis",
-      //         key2: "Concierto X",
-      //       },
-      //       rewardId: "954942d8-19ed-4b24-b208-37cf9a80c2fa",
-      //       tokensLimit: 1000,
-      //       type: "cross",
-      //       "~version": "CgMBCgA=",
-      //     },
-      //     {
-      //       _id: "36503733-acb7-473b-b75a-90b8cfa353b6",
-      //       _rev: "1-02bd2bea0cafc3229b772a572d318966",
-      //       companyId: "c8ef0428-8507-477a-a67a-3aa1f07a4b79",
-      //       date:
-      //         "Thu Apr 02 2020 17:38:53 GMT+0000 (Coordinated Universal Time)",
-      //       guestCompanyId: "a38f6556-bbdf-486f-ad13-6f526af8a3d4",
-      //       missionName: "EnlaU",
-      //       movementsRequired: 20,
-      //       from: "raver.png",
-      //       to: "enlau.png",
-      //       reward: {
-      //         desc: "Compra 1 entrada y obtén domicilio gratis hasta 5.000",
-      //         key1: "Domicilio gratis",
-      //         key2: "5.0000",
-      //       },
-      //       rewardId: "954942d8-19ed-4b24-b208-37cf9a80c2fa",
-      //       tokensLimit: 1000,
-      //       type: "cross",
-      //       "~version": "CgMBCgA=",
-      //     },
-      //     {
-      //       _id: "36503733-acb7-473b-b75a-90b8cfa353b6",
-      //       _rev: "1-02bd2bea0cafc3229b772a572d318966",
-      //       companyId: "c8ef0428-8507-477a-a67a-3aa1f07a4b79",
-      //       date:
-      //         "Thu Apr 02 2020 17:38:53 GMT+0000 (Coordinated Universal Time)",
-      //       guestCompanyId: "a38f6556-bbdf-486f-ad13-6f526af8a3d4",
-      //       missionName: "Beat",
-      //       movementsRequired: 20,
-      //       from: "raver.png",
-      //       to: "beat.png",
-      //       reward: {
-      //         desc: "Compra 1 entrada y recibe un viaje gratis en Beat",
-      //         key1: "Viaje gratis",
-      //         key2: "10.000",
-      //       },
-      //       rewardId: "954942d8-19ed-4b24-b208-37cf9a80c2fa",
-      //       tokensLimit: 1000,
-      //       type: "cross",
-      //       "~version": "CgMBCgA=",
-      //     },
-      //   ],
-      // };
+    // let response = {
+    //   missions: [
+    //     {
+    //       _id: "36503733-acb7-473b-b75a-90b8cfa353b6",
+    //       _rev: "1-02bd2bea0cafc3229b772a572d318966",
+    //       companyId: "c8ef0428-8507-477a-a67a-3aa1f07a4b79",
+    //       date:
+    //         "Thu Apr 02 2020 17:38:53 GMT+0000 (Coordinated Universal Time)",
+    //       guestCompanyId: "a38f6556-bbdf-486f-ad13-6f526af8a3d4",
+    //       missionName: "Test3cross",
+    //       movementsRequired: 20,
+    //       rewardId: "954942d8-19ed-4b24-b208-37cf9a80c2fa",
+    //       tokensLimit: 1000,
+    //       from: "muvo.png",
+    //       to: "raver.png",
+    //       reward: {
+    //         desc: "Completa 5 viajes en Muvo y obtén 20% de descuento en Raver",
+    //         key1: "Cupón",
+    //         key2: "20%",
+    //       },
+    //       type: "cross",
+    //       "~version": "CgMBCgA=",
+    //     },
+    //     {
+    //       _id: "36503733-acb7-473b-b75a-90b8cfa353b6",
+    //       _rev: "1-02bd2bea0cafc3229b772a572d318966",
+    //       companyId: "c8ef0428-8507-477a-a67a-3aa1f07a4b79",
+    //       date:
+    //         "Thu Apr 02 2020 17:38:53 GMT+0000 (Coordinated Universal Time)",
+    //       guestCompanyId: "a38f6556-bbdf-486f-ad13-6f526af8a3d4",
+    //       missionName: "Test5cross",
+    //       movementsRequired: 20,
+    //       from: "grin.png",
+    //       to: "raver.png",
+    //       reward: {
+    //         desc:
+    //           "Completa 4 viajes en Grin y obtén 1 entrada a un concierto en Raver",
+    //         key1: "Entrada gratis",
+    //         key2: "Concierto X",
+    //       },
+    //       rewardId: "954942d8-19ed-4b24-b208-37cf9a80c2fa",
+    //       tokensLimit: 1000,
+    //       type: "cross",
+    //       "~version": "CgMBCgA=",
+    //     },
+    //     {
+    //       _id: "36503733-acb7-473b-b75a-90b8cfa353b6",
+    //       _rev: "1-02bd2bea0cafc3229b772a572d318966",
+    //       companyId: "c8ef0428-8507-477a-a67a-3aa1f07a4b79",
+    //       date:
+    //         "Thu Apr 02 2020 17:38:53 GMT+0000 (Coordinated Universal Time)",
+    //       guestCompanyId: "a38f6556-bbdf-486f-ad13-6f526af8a3d4",
+    //       missionName: "EnlaU",
+    //       movementsRequired: 20,
+    //       from: "raver.png",
+    //       to: "enlau.png",
+    //       reward: {
+    //         desc: "Compra 1 entrada y obtén domicilio gratis hasta 5.000",
+    //         key1: "Domicilio gratis",
+    //         key2: "5.0000",
+    //       },
+    //       rewardId: "954942d8-19ed-4b24-b208-37cf9a80c2fa",
+    //       tokensLimit: 1000,
+    //       type: "cross",
+    //       "~version": "CgMBCgA=",
+    //     },
+    //     {
+    //       _id: "36503733-acb7-473b-b75a-90b8cfa353b6",
+    //       _rev: "1-02bd2bea0cafc3229b772a572d318966",
+    //       companyId: "c8ef0428-8507-477a-a67a-3aa1f07a4b79",
+    //       date:
+    //         "Thu Apr 02 2020 17:38:53 GMT+0000 (Coordinated Universal Time)",
+    //       guestCompanyId: "a38f6556-bbdf-486f-ad13-6f526af8a3d4",
+    //       missionName: "Beat",
+    //       movementsRequired: 20,
+    //       from: "raver.png",
+    //       to: "beat.png",
+    //       reward: {
+    //         desc: "Compra 1 entrada y recibe un viaje gratis en Beat",
+    //         key1: "Viaje gratis",
+    //         key2: "10.000",
+    //       },
+    //       rewardId: "954942d8-19ed-4b24-b208-37cf9a80c2fa",
+    //       tokensLimit: 1000,
+    //       type: "cross",
+    //       "~version": "CgMBCgA=",
+    //     },
+    //   ],
+    // };
   });
 };
-module.exports.getRewards = (req, res) => {
-  return getGateway.then(async ({ gateway, network }) => {
-    const contract = network.getContract("fabcar");
-    let { companyId } = req.body;
-    let obj = {
-      companyId,
-    };
-    console.log("obj::::>", obj);
-    const result = await contract.submitTransaction(
-      "getRewards",
-      JSON.stringify(obj)
-    );
-    let retu = JSON.parse(result.toString())
-    res.status(200).json(retu);
-  });
-};
+// module.exports.getRewards = (req, res) => {
+//   return getGateway.then(async ({ gateway, network }) => {
+//     const contract = network.getContract("fabcar");
+//     let { companyId } = req.body;
+//     let obj = {
+//       companyId,
+//     };
+//     console.log("obj::::>", obj);
+//     const result = await contract.submitTransaction(
+//       "getRewards",
+//       JSON.stringify(obj)
+//     );
+//     let retu = JSON.parse(result.toString());
+//     res.status(200).json(retu);
+//   });
+// };
 
 module.exports.rewardCreate = (req, res) => {
   console.log(req.body);
