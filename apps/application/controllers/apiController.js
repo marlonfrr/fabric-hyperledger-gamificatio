@@ -70,7 +70,7 @@ module.exports.userCreate = (req, res) => {
       name,
       id,
       age,
-      tokens: 0,
+      tokens: 100,
       enrolledMissions: [],
       availableRewards: [],
       sendTransactions: [],
