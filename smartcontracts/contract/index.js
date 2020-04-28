@@ -6,6 +6,7 @@
 
 const shim = require("fabric-shim");
 const util = require("util");
+const uuidv4 = require("uuid/v4");
 
 var ABstore = class {
   // Initialize the chaincode
@@ -170,6 +171,62 @@ var ABstore = class {
     await stub.putState(A, B);
   }
 
+  async multipleCrossMissionCreate(stub, args) {
+    if (args.length != 2) {
+      throw new Error("Incorrect number of arguments. Expecting 2");
+    }
+    let A = args[0];
+    let B = args[1];
+    let json = JSON.parse(B);
+    console.log("incoming parsed json", json);
+    if (json.type == "multipleCross") {
+      let {
+        companyId,
+        guestCompanies,
+        guestsNumber,
+        tokensLimit,
+        type,
+        date,
+      } = json;
+      let { rewardId, description, key1, key2 } = json.reward;
+
+      // Update local company missions array
+      let companyBuffer = await stub.getState(companyId);
+      let company = JSON.parse(companyBuffer.toString());
+      console.log("company::>", company);
+      company["missions"].push(A);
+      console.log("updated company", company);
+      console.log("company id to put", companyId);
+
+      // Put companies with missons updated
+      await stub.putState(companyId, JSON.stringify(company));
+
+      // Update guest company guest-missions array
+      for (let i = 0; i < guestCompanies.length; i++) {
+        let guestCompanyId = guestCompanies[i].companyId;
+        let guestCompanyBuffer = await stub.getState(guestCompanyId);
+        let guestCompany = JSON.parse(guestCompanyBuffer.toString());
+        console.log("guest company::>", guestCompany);
+        guestCompany["guestMissions"].push(A);
+        console.log("updated company", guestCompany);
+        // Put company with missons updated
+        await stub.putState(guestCompanyId, JSON.stringify(guestCompany));
+        // Create reward
+        await stub.putState(uuidv4(), JSON.stringify(guestCompanies[i].reward));
+      }
+    } else {
+      throw new Error("Misson type not expected");
+    }
+
+    if (!A || !B) {
+      throw new Error("2 arguments needed");
+    }
+    console.log("A::>", A);
+    console.log("B::>", B);
+    // Put mission record
+    await stub.putState(A, B);
+  }
+
   async getMissions(stub, args) {
     if (args.length != 1) {
       throw new Error("Incorrect number of arguments. Expecting 1");
@@ -282,6 +339,8 @@ var ABstore = class {
     console.log("updated user", user);
     console.log("user id to put", userId);
     // Put company with missons updated
+
+    // Falta crear registro de movement
     await stub.putState(userId, JSON.stringify(user));
   }
 

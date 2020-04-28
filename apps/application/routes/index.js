@@ -23,6 +23,7 @@ router.post('/v1/getMissions', apiRouter);
 router.post('/v1/userCreate', apiRouter);
 router.post('/v1/companyCreate', apiRouter);
 router.post('/v1/missionCreate', apiRouter);
+router.post('/v1/multipleCrossMissionCreate', apiRouter);
 router.post('/v1/rewardCreate', apiRouter);
 router.post('/v1/missionEnroll', apiRouter);
 router.post('/v1/performMovement', apiRouter);

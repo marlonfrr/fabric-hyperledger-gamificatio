@@ -15,6 +15,7 @@ router.post('/v1/getMissions', apiController.getMissions);
 router.post('/v1/userCreate', apiController.userCreate);
 router.post('/v1/companyCreate', apiController.companyCreate);
 router.post('/v1/missionCreate', apiController.missionCreate);
+router.post('/v1/multipleCrossMissionCreate', apiController.multipleCrossMissionCreate);
 router.post('/v1/rewardCreate', apiController.rewardCreate);
 router.post('/v1/missionEnroll', apiController.missionEnroll);
 router.post('/v1/performMovement', apiController.performMovement);

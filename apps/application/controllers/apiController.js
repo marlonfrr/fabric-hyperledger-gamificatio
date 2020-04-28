@@ -189,6 +189,50 @@ module.exports.missionCreate = (req, res) => {
   });
 };
 
+module.exports.multipleCrossMissionCreate = (req, res) => {
+  console.log(req.body);
+  let {
+    companyId,
+    missionName,
+    description,
+    type,
+    guestsNumber,
+    guestCompanies
+  } = req.body;
+  return getGateway.then(async ({ gateway, network }) => {
+    const contract = network.getContract("fabcar");
+    let key = uuidv4();
+    let obj = undefined;
+    if (type == "multipleCross") {
+      console.log("-----------------------------------------");
+      console.log("multipleCross");
+      console.log("-----------------------------------------");
+      obj = {
+        ...req.body,
+        date: new Date().getTime(),
+        missionId: key,
+      };
+    } else {
+      console.log("-----------------------------------------");
+      console.log("Ningún tipo (apiController.js)");
+      console.log("-----------------------------------------");
+      res.status(500).json({ status: "error" });
+    }
+    try {
+      const result = await contract.submitTransaction(
+        "multipleCrossMissionCreate",
+        key,
+        JSON.stringify(obj)
+      );
+      console.log(result);
+    } catch (err) {
+      console.log("Failed submiting transaction to contract", err);
+    }
+
+    res.status(200).json(obj);
+  });
+};
+
 module.exports.getMissions = (req, res) => {
   return getGateway.then(async ({ gateway, network }) => {
     const contract = network.getContract("fabcar");
