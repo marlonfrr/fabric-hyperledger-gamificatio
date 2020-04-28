@@ -188,7 +188,6 @@ var ABstore = class {
         type,
         date,
       } = json;
-      let { description, key1, key2 } = json.reward;
 
       // Update local company missions array
       let companyBuffer = await stub.getState(companyId);
