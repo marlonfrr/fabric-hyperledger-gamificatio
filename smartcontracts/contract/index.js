@@ -377,7 +377,7 @@ var ABstore = class {
     console.log("-------------")
     console.log(Avalbytes+ "njknjknjk piees")
     console.log(typeof(Avalbytes)+ "typeof")
-    console.log(Avalbytes='', "true o jalse")
+    console.log(Avalbytes=='', "true o jalse")
     console.log("-------------")
 
     if (!Avalbytes) {
