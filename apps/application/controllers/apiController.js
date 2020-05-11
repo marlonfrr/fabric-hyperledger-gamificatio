@@ -23,9 +23,7 @@ module.exports.getTransaction = (req, res) => {
       var result = await contract.submitTransaction("query", req.body.key);
     } catch (err) {
       res.status(404).json({ error: err.endorsements[0].message });
-      console.log("Don't u close your eyes::::>", err)
     }
-    console.log("error catching",result)
     let response = JSON.parse(result.toString());
     res.status(200).json(response);
   });
@@ -488,7 +486,7 @@ module.exports.tokensSend = (req, res) => {
       );
       console.log(result);
     } catch (err) {
-      console.log(err);
+      res.status(404).json({ error: err.endorsements[0].message });
     }
     res.status(200).json(obj);
   });

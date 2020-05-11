@@ -333,6 +333,9 @@ var ABstore = class {
     let userBufferFrom = await stub.getState(userIdFrom);
     let userFrom = JSON.parse(userBufferFrom.toString());
     console.log("user::>", userFrom);
+    if(user.tokens<tokens){
+      throw "No tiene suficientes tokens"
+    }
     userFrom.sendTransactions.push(transactionId);
     userFrom.tokens -= tokens;
     await stub.putState(userIdFrom, JSON.stringify(userFrom));
