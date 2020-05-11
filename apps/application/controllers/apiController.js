@@ -22,6 +22,7 @@ module.exports.getTransaction = (req, res) => {
     try{
       const result = await contract.submitTransaction("query", req.body.key);
     } catch (err) {
+      res.status(404).json({ error: err.message });
       console.log("Don't u close your eyes::::>", err)
     }
     console.log("error catching",result)
