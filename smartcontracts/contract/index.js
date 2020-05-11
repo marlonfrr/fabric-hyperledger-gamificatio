@@ -374,18 +374,10 @@ var ABstore = class {
 
     // Get the state from the ledger
     let Avalbytes = await stub.getState(A);
-    console.log("-------------")
-    console.log(Avalbytes+ "njknjknjk piees")
-    console.log(typeof(Avalbytes)+ "typeof")
-    console.log(Avalbytes=='', "true o jalse")
-    console.log("-------------")
-
-    if (!Avalbytes) {
+    if (!Avalbytes || Avalbytes=='') {
       jsonResp.error = "Failed to get state for " + A;
-      throw new Error(jsonResp);
+      throw new Error(Buffer.from(JSON.stringify(jsonResp)));
     }
-
-    console.log("jajej")
 
     jsonResp.name = A;
     jsonResp.amount = Avalbytes.toString();
