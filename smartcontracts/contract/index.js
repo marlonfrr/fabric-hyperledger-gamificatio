@@ -376,9 +376,9 @@ var ABstore = class {
     let Avalbytes = await stub.getState(A);
     if (!Avalbytes) {
       jsonResp.error = "Failed to get state for " + A;
-      throw new Error(JSON.stringify(jsonResp));
+      throw new Error(Buffer.fromJSON.stringify(jsonResp));
     }
-
+    
     jsonResp.name = A;
     jsonResp.amount = Avalbytes.toString();
     console.info("Query Response:");
