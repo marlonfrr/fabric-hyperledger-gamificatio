@@ -251,31 +251,6 @@ var ABstore = class {
     return buf;
   }
 
-  // async getRewards(stub, args) {
-  //   if (args.length != 1) {
-  //     throw new Error("Incorrect number of arguments. Expecting 1");
-  //   }
-  //   let A = args[0];
-  //   if (!A) {
-  //     throw new Error("1 argument needed");
-  //   }
-  //   let json = JSON.parse(A);
-  //   let { companyId } = json;
-  //   let companyBuffer = await stub.getState(companyId);
-  //   let company = JSON.parse(companyBuffer.toString());
-  //   let obj = {};
-  //   let ret = [];
-  //   for (let i = 0; i < company.rewards.length; i++) {
-  //     const v = company.rewards[i];
-  //     let rewardBuffer = await stub.getState(v);
-  //     let reward = JSON.parse(rewardBuffer.toString());
-  //     ret.push(reward);
-  //   }
-  //   obj = { result: ret };
-  //   let buf = Buffer.from(JSON.stringify(obj));
-  //   return buf;
-  // }
-
   async rewardCreate(stub, args) {
     if (args.length != 2) {
       throw new Error("Incorrect number of arguments. Expecting 2");

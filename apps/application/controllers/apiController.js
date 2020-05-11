@@ -20,6 +20,7 @@ module.exports.getTransaction = (req, res) => {
     const contract = network.getContract("fabcar");
     console.log(req.body);
     const result = await contract.submitTransaction("query", req.body.key);
+    console.log("error catching",result)
     let response = JSON.parse(result.toString());
     res.status(200).json(response);
   });
