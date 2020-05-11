@@ -379,6 +379,8 @@ var ABstore = class {
       throw new Error(jsonResp);
     }
 
+    console.log("jajej")
+
     jsonResp.name = A;
     jsonResp.amount = Avalbytes.toString();
     console.info("Query Response:");
