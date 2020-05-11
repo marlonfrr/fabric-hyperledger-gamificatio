@@ -19,7 +19,11 @@ module.exports.getTransaction = (req, res) => {
   return getGateway.then(async ({ gateway, network }) => {
     const contract = network.getContract("fabcar");
     console.log(req.body);
-    const result = await contract.submitTransaction("query", req.body.key);
+    try{
+      const result = await contract.submitTransaction("query", req.body.key);
+    } catch (err) {
+      console.log("Don't u close your eyes::::>", err)
+    }
     console.log("error catching",result)
     let response = JSON.parse(result.toString());
     res.status(200).json(response);
