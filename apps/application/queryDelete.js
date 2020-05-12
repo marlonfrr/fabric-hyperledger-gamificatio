@@ -5,7 +5,7 @@ const getGateway = require('./gateway/gateway');
 let gate;
 getGateway.then(async({gateway, network}) => {
   gate = gateway;
-  const contract = network.getContract('fabcar');
+  const contract = network.getContract('chaincode');
   const result = await contract.submitTransaction('delete', 'Hi');
 //  let response = result;
   let response = result.toString();

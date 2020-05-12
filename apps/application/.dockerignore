@@ -1,0 +1,8 @@
+node_modules
+npm-debug.log
+
+wallet/
+
+gateway/connection-org1.json
+gateway/connection-org1-minikube.json
+gateway/connection-org1-azure.json

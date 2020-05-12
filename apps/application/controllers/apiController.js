@@ -5,7 +5,7 @@ const uuidv4 = require("uuid/v4");
 
 module.exports.auth = (req, res) => {
   // return getGateway.then(async ({ gateway, network }) => {
-  //   const contract = network.getContract("fabcar");
+  //   const contract = network.getContract("chaincode");
   //   const result = await contract.submitTransaction(
   //     "query",
   //     req.body.transactionId
@@ -17,7 +17,7 @@ module.exports.auth = (req, res) => {
 
 module.exports.getTransaction = (req, res) => {
   return getGateway.then(async ({ gateway, network }) => {
-    const contract = network.getContract("fabcar");
+    const contract = network.getContract("chaincode");
     console.log(req.body);
     try{
       var result = await contract.submitTransaction("query", req.body.key);
@@ -46,7 +46,7 @@ module.exports.postTransaction = (req, res) => {
       sourceCompanyName: "Grin",
       points: "150",
     };
-    const contract = network.getContract("fabcar");
+    const contract = network.getContract("chaincode");
     try {
       const result = await contract.submitTransaction(
         "invoke",
@@ -68,7 +68,7 @@ module.exports.userCreate = (req, res) => {
   console.log(req.body);
   let { name, id, age } = req.body;
   return getGateway.then(async ({ gateway, network }) => {
-    const contract = network.getContract("fabcar");
+    const contract = network.getContract("chaincode");
     // let key = uuidv4();
     let obj = {
       name,
@@ -99,7 +99,7 @@ module.exports.companyCreate = (req, res) => {
   console.log(req.body);
   let { name } = req.body;
   return getGateway.then(async ({ gateway, network }) => {
-    const contract = network.getContract("fabcar");
+    const contract = network.getContract("chaincode");
     // let key = uuidv4();
     let key = name;
     let obj = {
@@ -137,7 +137,7 @@ module.exports.missionCreate = (req, res) => {
     description,
   } = req.body;
   return getGateway.then(async ({ gateway, network }) => {
-    const contract = network.getContract("fabcar");
+    const contract = network.getContract("chaincode");
     let key = uuidv4();
     let obj = undefined;
     if (type == "cross") {
@@ -204,7 +204,7 @@ module.exports.multipleCrossMissionCreate = (req, res) => {
     guestCompanies
   } = req.body;
   return getGateway.then(async ({ gateway, network }) => {
-    const contract = network.getContract("fabcar");
+    const contract = network.getContract("chaincode");
     let key = uuidv4();
     let obj = undefined;
     if (type == "multipleCross") {
@@ -239,7 +239,7 @@ module.exports.multipleCrossMissionCreate = (req, res) => {
 
 module.exports.getMissions = (req, res) => {
   return getGateway.then(async ({ gateway, network }) => {
-    const contract = network.getContract("fabcar");
+    const contract = network.getContract("chaincode");
     let { companyId } = req.body;
     let obj = {
       companyId,
@@ -346,7 +346,7 @@ module.exports.getMissions = (req, res) => {
 };
 // module.exports.getRewards = (req, res) => {
 //   return getGateway.then(async ({ gateway, network }) => {
-//     const contract = network.getContract("fabcar");
+//     const contract = network.getContract("chaincode");
 //     let { companyId } = req.body;
 //     let obj = {
 //       companyId,
@@ -364,7 +364,7 @@ module.exports.getMissions = (req, res) => {
 module.exports.rewardCreate = (req, res) => {
   console.log(req.body);
   return getGateway.then(async ({ gateway, network }) => {
-    const contract = network.getContract("fabcar");
+    const contract = network.getContract("chaincode");
     let key = uuidv4();
     let obj = {
       companyId: req.body.companyId,
@@ -392,7 +392,7 @@ module.exports.rewardCreate = (req, res) => {
 module.exports.missionEnroll = (req, res) => {
   console.log(req.body);
   return getGateway.then(async ({ gateway, network }) => {
-    const contract = network.getContract("fabcar");
+    const contract = network.getContract("chaincode");
     let key = uuidv4();
     let obj = {
       userId: req.body.userId,
@@ -416,7 +416,7 @@ module.exports.missionEnroll = (req, res) => {
 module.exports.performMovement = (req, res) => {
   console.log(req.body);
   return getGateway.then(async ({ gateway, network }) => {
-    const contract = network.getContract("fabcar");
+    const contract = network.getContract("chaincode");
     let key = uuidv4();
     let obj = {
       userId: req.body.userId,
@@ -440,7 +440,7 @@ module.exports.performMovement = (req, res) => {
 // module.exports.awardReward = (req, res) => {
 //   console.log(req.body);
 //   return getGateway.then(async ({ gateway, network }) => {
-//     const contract = network.getContract("fabcar");
+//     const contract = network.getContract("chaincode");
 //     // try{
 //     //     const result = await contract.submitTransaction('invoke', bId, JSON.stringify(obj));
 //     //    console.log(result);
@@ -455,7 +455,7 @@ module.exports.performMovement = (req, res) => {
 module.exports.redeemReward = (req, res) => {
   console.log(req.body);
   return getGateway.then(async ({ gateway, network }) => {
-    const contract = network.getContract("fabcar");
+    const contract = network.getContract("chaincode");
     // try{
     //     const result = await contract.submitTransaction('invoke', bId, JSON.stringify(obj));
     //    console.log(result);
@@ -470,7 +470,7 @@ module.exports.redeemReward = (req, res) => {
 module.exports.tokensSend = (req, res) => {
   console.log(req.body);
   return getGateway.then(async ({ gateway, network }) => {
-    const contract = network.getContract("fabcar");
+    const contract = network.getContract("chaincode");
     let key = uuidv4();
     let obj = {
       userIdFrom: req.body.userIdFrom,

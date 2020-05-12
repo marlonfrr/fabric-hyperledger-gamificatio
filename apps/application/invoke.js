@@ -11,7 +11,7 @@ getGateway.then(async({gateway, network}) => {
  let missionId = uuidv4();
  let obj = {id: id, "type": "Add points", missionId, userId, sourceCompanyId, "sourceCompanyName": "Grin", "points": "150"}
   gate = gateway;
-  const contract = network.getContract('fabcar');
+  const contract = network.getContract('chaincode');
   await contract.submitTransaction('invoke', bId, JSON.stringify(obj));
 
   console.log('Transaction has been submitted');
@@ -24,4 +24,3 @@ getGateway.then(async({gateway, network}) => {
   .finally(()=>{
     gate.disconnect();
   });
-

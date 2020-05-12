@@ -15,7 +15,7 @@ getGateway
       receivedTransactions: []
     };
     gate = gateway;
-    const contract = network.getContract("fabcar");
+    const contract = network.getContract("chaincode");
     await contract.submitTransaction("createUser", key, JSON.stringify(obj));
     console.log("Transaction has been submitted");
     return;
