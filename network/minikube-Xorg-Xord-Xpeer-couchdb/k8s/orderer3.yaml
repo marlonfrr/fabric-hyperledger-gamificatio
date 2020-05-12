@@ -1,0 +1,145 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: orderer3
+  # name: orderer3-clusterip
+spec:
+  selector:
+    app: orderer3
+  ports:
+  - port: 443
+    name: orderer3
+  type: ClusterIP
+
+---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: orderer3-nodeport
+# spec:
+#   selector:
+#     app: orderer3
+#   ports:
+#     - name: orderer3
+#       port: 443
+#       nodePort: 443
+#   type: LoadBalancer
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orderer3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orderer3
+  template:
+    metadata:
+      labels:
+        app: orderer3
+    spec:
+      # subdomain: example
+      containers:
+        - name: orderer3
+          # image: busybox:1.31.1
+          # command: [ "sleep", "3600" ]
+
+          image: hyperledger/fabric-orderer:2.0.1
+          ports:
+            - containerPort: 443
+              name: web
+          env:
+            - name: FABRIC_LOGGING_SPEC
+              value: INFO
+            - name: ORDERER_GENERAL_LISTENPORT
+              value: "443"
+            - name: ORDERER_GENERAL_LISTENADDRESS
+              value: 0.0.0.0
+            - name: ORDERER_GENERAL_GENESISMETHOD
+              value: file
+            - name: ORDERER_GENERAL_GENESISFILE
+              value: /var/hyperledger/orderer/orderer.genesis.block
+            - name: ORDERER_GENERAL_LOCALMSPID
+              value: OrdererMSP
+            - name: ORDERER_GENERAL_LOCALMSPDIR
+              value: /var/hyperledger/orderer/msp
+              # enabled TLS
+            - name: ORDERER_GENERAL_TLS_ENABLED
+              value: "true"
+            - name: ORDERER_GENERAL_TLS_PRIVATEKEY
+              value: /var/hyperledger/orderer/tls/server.key
+            - name: ORDERER_GENERAL_TLS_CERTIFICATE
+              value: /var/hyperledger/orderer/tls/server.crt
+            - name: ORDERER_GENERAL_TLS_ROOTCAS
+              value: "[/var/hyperledger/orderer/tls/ca.crt]"
+            - name: ORDERER_KAFKA_TOPIC_REPLICATIONFACTOR
+              value: "1"
+            - name: ORDERER_KAFKA_VERBOSE
+              value: "true"
+            - name: ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE
+              value: /var/hyperledger/orderer/tls/server.crt
+            - name: ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY
+              value: /var/hyperledger/orderer/tls/server.key
+            - name: ORDERER_GENERAL_CLUSTER_ROOTCAS
+              value: "[/var/hyperledger/orderer/tls/ca.crt]"
+
+          volumeMounts:
+          - name: orderer3
+            mountPath: /var/hyperledger/production/orderer
+          - name: volume-genesis
+            mountPath: /var/hyperledger/orderer/orderer.genesis.block
+            subPath: orderer.genesis.block
+          - name: volume-msp-un
+            mountPath: /var/hyperledger/orderer/msp
+          - name: volume-tls-un
+            mountPath: /var/hyperledger/orderer/tls
+
+      initContainers:
+          - name: init-orderer
+            image: busybox:1.31.1
+            command: ['/bin/sh', '-c']
+            args: ["tar -xzvf /etc/mybuildmsp/msp.tar.gz --strip-components=1 -C /var/hyperledger/orderer/msp; tar -xzvf /etc/mybuildtls/tls.tar.gz --strip-components=1 -C /var/hyperledger/orderer/tls"]
+            volumeMounts:
+            - name: volume-msp
+              mountPath: /etc/mybuildmsp/
+            - name: volume-msp-un
+              mountPath: /var/hyperledger/orderer/msp
+
+            - name: volume-tls
+              mountPath: /etc/mybuildtls/
+            - name: volume-tls-un
+              mountPath: /var/hyperledger/orderer/tls
+
+      volumes:
+        - name: volume-genesis
+          configMap:
+            name: orderer-genesis
+        - name: volume-msp
+          configMap:
+            name: orderer3-msp
+        - name: volume-msp-un
+          emptyDir: {}
+
+        - name: volume-tls
+          configMap:
+            name: orderer3-tls
+        - name: volume-tls-un
+          emptyDir: {}
+        - name: orderer3
+          persistentVolumeClaim:
+            claimName: orderer3
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: orderer3
+spec:
+  accessModes: [ "ReadWriteOnce" ]
+  storageClassName: peer-storage
+  resources:
+    requests:
+      storage: 100Mi

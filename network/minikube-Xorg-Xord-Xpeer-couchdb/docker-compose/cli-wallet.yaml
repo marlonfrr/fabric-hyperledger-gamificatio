@@ -1,0 +1,18 @@
+version: '2'
+
+services:
+  cli-wallet:
+    container_name: cli-wallet
+    image: node:10
+    # image: busybox:1.31.1
+    stdin_open: true  #comment this and the following to run server
+    tty: true
+    working_dir: /var/workspace/wallet/
+    user: ${CURRENT_UID}
+    command: "npm start"
+    environment:
+      - LOCAL=false
+    volumes:
+      - ../:/var/workspace/
+    # ports:
+    #   - "3000:3000"

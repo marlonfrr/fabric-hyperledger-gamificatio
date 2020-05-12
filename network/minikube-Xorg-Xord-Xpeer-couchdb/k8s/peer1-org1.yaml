@@ -1,0 +1,190 @@
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: peer1-org1
+  # name: peer1-org1-clusterip
+spec:
+  ports:
+  - port: 443
+    name: peer1-org1-clusterip
+  - port: 31055
+    name: peer1-port-cc
+  selector:
+    app: peer1-org1
+  type: ClusterIP
+
+---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: peer1-org1-nodeport
+# spec:
+#   selector:
+#     app: peer1-org1
+#   ports:
+#     - name: peer1-port1
+#       port: 443
+#       nodePort: 443
+#     - name: peer1-port-cc
+#       port: 31055
+#       nodePort: 31055
+#   type: LoadBalancer
+
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: peer1-org1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: peer1-org1
+  template:
+    metadata:
+      labels:
+        app: peer1-org1
+    spec:
+      # subdomain: example
+      containers:
+        - name: peer1-org1
+          # image: busybox:1.31.1
+          # command: [ "sleep", "3600" ]
+
+          image: hyperledger/fabric-peer:2.0.1
+          ports:
+            - containerPort: 443
+              name: peer1-port1
+            - containerPort: 31055
+              name: peer1-port-cc
+          env:
+            - name: CORE_VM_ENDPOINT
+              value: unix:///var/run/docker.sock
+              # the following setting starts chaincode containers on the same
+              # bridge network as the peers
+              # https://docs.docker.com/compose/networking/
+            # - name: CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE
+            #   value: net_test
+            - name: FABRIC_LOGGING_SPEC
+              value: DEBUG
+            - name: CORE_PEER_TLS_ENABLED
+              value: "true"
+            - name: CORE_PEER_GOSSIP_USELEADERELECTION
+              value: "true"
+            - name: CORE_PEER_GOSSIP_ORGLEADER
+              value: "false"
+            - name: CORE_PEER_PROFILE_ENABLED
+              value: "true"
+            - name: CORE_PEER_TLS_CERT_FILE
+              value: /etc/hyperledger/fabric/tls/server.crt
+            - name: CORE_PEER_TLS_KEY_FILE
+              value: /etc/hyperledger/fabric/tls/server.key
+            - name: CORE_PEER_TLS_ROOTCERT_FILE
+              value: /etc/hyperledger/fabric/tls/ca.crt
+              # Peer specific variabes
+            - name: CORE_PEER_ID
+              value: peer1.org1.example.com
+            - name: CORE_PEER_ADDRESS
+              value: 0.0.0.0:443
+            # - name: CORE_PEER_ADDRESS
+            #   value: peer1.org1.example.com:443
+            - name: CORE_PEER_LISTENADDRESS
+              value: 0.0.0.0:443
+            # - name: CORE_PEER_CHAINCODEADDRESS
+            #   value: peer1.org1.example.com:31055
+            - name: CORE_PEER_CHAINCODELISTENADDRESS
+              value: 0.0.0.0:31055
+            - name: CORE_PEER_GOSSIP_BOOTSTRAP
+              value: peer1.org1.example.com:443
+            - name: CORE_PEER_GOSSIP_EXTERNALENDPOINT
+              value: peer1.org1.example.com:443
+            - name: CORE_PEER_LOCALMSPID
+              value: Org1MSP
+            #CouchDB
+            - name: CORE_LEDGER_STATE_STATEDATABASE
+              value: CouchDB
+            - name: CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS
+              value: peer1-org1-couchdb:5984
+            - name: CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME
+              value: ""
+            - name: CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
+              value: ""
+
+          volumeMounts:
+          - name: peer1-org1
+            mountPath: /var/hyperledger/production
+          - name: dockersock
+            mountPath: /var/run/docker.sock
+
+          - name: volume-msp-un
+            mountPath: /etc/hyperledger/fabric/msp
+          - name: volume-tls-un
+            mountPath: /etc/hyperledger/fabric/tls
+
+          - name: volume-core
+            mountPath: /etc/hyperledger/fabric/core.yaml
+            subPath: core.yaml
+
+
+      initContainers:
+          - name: init-peer1-org1
+            image: busybox:1.31.1
+            command: ['/bin/sh', '-c']
+            args: ["tar -xzvf /etc/mybuildmsp/msp.tar.gz --strip-components=1 -C /etc/hyperledger/fabric/msp; tar -xzvf /etc/mybuildtls/tls.tar.gz --strip-components=1 -C /etc/hyperledger/fabric/tls"]
+            volumeMounts:
+            - name: volume-msp
+              mountPath: /etc/mybuildmsp/
+            - name: volume-msp-un
+              mountPath: /etc/hyperledger/fabric/msp
+
+            - name: volume-tls
+              mountPath: /etc/mybuildtls/
+            - name: volume-tls-un
+              mountPath: /etc/hyperledger/fabric/tls
+
+          #CouchDB
+          - name: init-peer1-org1-couchdb
+            image: busybox:1.31.1
+            command: ['/bin/sh', '-c']
+            args: ["while [[ true ]]; do wget --timeout 5 --spider -S http://peer1-org1-couchdb:5984; if [[ $? == 0 ]]; then exit 0; fi; sleep 10; done;"]
+
+
+      volumes:
+      - name: dockersock
+        hostPath:
+          path: /var/run/docker.sock
+
+      - name: volume-msp
+        configMap:
+          name: peer1-org1-msp
+      - name: volume-msp-un
+        emptyDir: {}
+
+      - name: volume-tls
+        configMap:
+          name: peer1-org1-tls
+      - name: volume-tls-un
+        emptyDir: {}
+
+      - name: volume-core
+        configMap:
+          name: peer1-org1-core
+
+      - name: peer1-org1
+        persistentVolumeClaim:
+          claimName: peer1-org1
+
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: peer1-org1
+spec:
+  accessModes: [ "ReadWriteOnce" ]
+  storageClassName: peer-storage
+  resources:
+    requests:
+      storage: 100Mi

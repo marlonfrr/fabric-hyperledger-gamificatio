@@ -1,0 +1,57 @@
+#https://docs.microsoft.com/en-us/azure/aks/coredns-custom
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns-custom
+  namespace: kube-system
+data:
+  test.server: |
+    orderer1.example.com:53 {
+        errors
+        cache 30
+        rewrite name orderer1.example.com orderer1.default.svc.cluster.local
+        #forward .  /etc/resolv.conf # you can redirect this to a specific DNS server such as 10.0.0.10
+        forward .  10.0.0.10 # you can redirect this to a specific DNS server such as 10.0.0.10
+    }
+    orderer2.example.com:53 {
+        errors
+        cache 30
+        rewrite name orderer2.example.com orderer2.default.svc.cluster.local
+        #forward .  /etc/resolv.conf # you can redirect this to a specific DNS server such as 10.0.0.10
+        forward .  10.0.0.10 # you can redirect this to a specific DNS server such as 10.0.0.10
+    }
+    orderer3.example.com:53 {
+        errors
+        cache 30
+        rewrite name orderer3.example.com orderer3.default.svc.cluster.local
+        #forward .  /etc/resolv.conf # you can redirect this to a specific DNS server such as 10.0.0.10
+        forward .  10.0.0.10 # you can redirect this to a specific DNS server such as 10.0.0.10
+    }
+    peer0.org1.example.com:53 {
+        errors
+        cache 30
+        rewrite name peer0.org1.example.com peer0-org1.default.svc.cluster.local
+        #forward .  /etc/resolv.conf # you can redirect this to a specific DNS server such as 10.0.0.10
+        forward .  10.0.0.10 # you can redirect this to a specific DNS server such as 10.0.0.10
+    }
+    peer1.org1.example.com:53 {
+        errors
+        cache 30
+        rewrite name peer1.org1.example.com peer1-org1.default.svc.cluster.local
+        #forward .  /etc/resolv.conf # you can redirect this to a specific DNS server such as 10.0.0.10
+        forward .  10.0.0.10 # you can redirect this to a specific DNS server such as 10.0.0.10
+    }
+    peer0.org2.example.com:53 {
+        errors
+        cache 30
+        rewrite name peer0.org2.example.com peer0-org2.default.svc.cluster.local
+        #forward .  /etc/resolv.conf # you can redirect this to a specific DNS server such as 10.0.0.10
+        forward .  10.0.0.10 # you can redirect this to a specific DNS server such as 10.0.0.10
+    }
+    peer1.org2.example.com:53 {
+        errors
+        cache 30
+        rewrite name peer1.org2.example.com peer1-org2.default.svc.cluster.local
+        #forward .  /etc/resolv.conf # you can redirect this to a specific DNS server such as 10.0.0.10
+        forward .  10.0.0.10 # you can redirect this to a specific DNS server such as 10.0.0.10
+    }
