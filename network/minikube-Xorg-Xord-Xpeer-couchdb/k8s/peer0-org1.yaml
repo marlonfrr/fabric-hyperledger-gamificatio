@@ -187,4 +187,4 @@ spec:
   storageClassName: peer-storage
   resources:
     requests:
-      storage: 100Mi
+      storage: 1Gi
