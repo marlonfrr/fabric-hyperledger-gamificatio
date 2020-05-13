@@ -32,35 +32,20 @@ module.exports.getTransaction = (req, res) => {
 module.exports.postTransaction = (req, res) => {
   console.log(req.body);
   return getGateway.then(async ({ gateway, network }) => {
-    let bId = uuidv4();
-    let id = uuidv4();
-    let userId = uuidv4();
-    let sourceCompanyId = uuidv4();
-    let missionId = uuidv4();
-    let obj = {
-      id: id,
-      type: "Add points",
-      missionId,
-      userId,
-      sourceCompanyId,
-      sourceCompanyName: "Grin",
-      points: "150",
-    };
+    let obj = req.body
     const contract = network.getContract("fabcar");
     try {
       const result = await contract.submitTransaction(
         "invoke",
-        bId,
+        obj.id,
         JSON.stringify(obj)
       );
-      console.log(result);
-      //  let response = JSON.parse(result.toString('utf-8'));
-      //console.log(response);
+      console.log("General invoke transaction",result);
     } catch (err) {
       console.log(err);
     }
 
-    res.status(200).json(obj);
+    res.status(200).json({...obj, id: obj.id});
   });
 };
 
