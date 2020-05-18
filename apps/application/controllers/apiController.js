@@ -19,7 +19,7 @@ module.exports.getTransaction = (req, res) => {
   return getGateway.then(async ({ gateway, network }) => {
     const contract = network.getContract("fabcar");
     console.log(req.body);
-    try{
+    try {
       var result = await contract.submitTransaction("query", req.body.key);
     } catch (err) {
       res.status(404).json({ error: err.endorsements[0].message });
@@ -32,7 +32,7 @@ module.exports.getTransaction = (req, res) => {
 module.exports.postTransaction = (req, res) => {
   console.log(req.body);
   return getGateway.then(async ({ gateway, network }) => {
-    let obj = req.body
+    let obj = req.body;
     const contract = network.getContract("fabcar");
     try {
       const result = await contract.submitTransaction(
@@ -40,20 +40,23 @@ module.exports.postTransaction = (req, res) => {
         obj.id,
         JSON.stringify(obj)
       );
-      console.log("General invoke transaction",result);
+      console.log("General invoke transaction", result);
     } catch (err) {
       console.log(err);
     }
 
-    res.status(200).json({...obj, id: obj.id});
+    res.status(200).json({ ...obj, id: obj.id });
   });
 };
 
 module.exports.userCreate = (req, res) => {
   console.log(req.body);
-  let { name, id, age
+  let {
+    name,
+    id,
+    age,
     // , enrolledMissions, sendTransactions, receivedTransactions
-   } = req.body;
+  } = req.body;
   return getGateway.then(async ({ gateway, network }) => {
     const contract = network.getContract("fabcar");
     // let key = uuidv4();
@@ -67,6 +70,7 @@ module.exports.userCreate = (req, res) => {
       sendTransactions: [],
       receivedTransactions: [],
     };
+    console.log(obj)
     try {
       const result = await contract.submitTransaction(
         "userCreate",
@@ -188,7 +192,7 @@ module.exports.multipleCrossMissionCreate = (req, res) => {
     description,
     type,
     guestsNumber,
-    guestCompanies
+    guestCompanies,
   } = req.body;
   return getGateway.then(async ({ gateway, network }) => {
     const contract = network.getContract("fabcar");
