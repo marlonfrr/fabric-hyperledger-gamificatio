@@ -51,7 +51,9 @@ module.exports.postTransaction = (req, res) => {
 
 module.exports.userCreate = (req, res) => {
   console.log(req.body);
-  let { name, id, age, enrolledMissions, sendTransactions, receivedTransactions } = req.body;
+  let { name, id, age
+    // , enrolledMissions, sendTransactions, receivedTransactions
+   } = req.body;
   return getGateway.then(async ({ gateway, network }) => {
     const contract = network.getContract("fabcar");
     // let key = uuidv4();
@@ -59,11 +61,11 @@ module.exports.userCreate = (req, res) => {
       name,
       id,
       age,
-      tokens: "100",
-      enrolledMissions,
-      // availableRewards: [],
-      sendTransactions,
-      receivedTransactions,
+      tokens: 100,
+      enrolledMissions: [],
+      availableRewards: [],
+      sendTransactions: [],
+      receivedTransactions: [],
     };
     try {
       const result = await contract.submitTransaction(
