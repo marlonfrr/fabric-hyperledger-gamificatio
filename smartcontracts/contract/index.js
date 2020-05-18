@@ -316,6 +316,16 @@ var ABstore = class {
 
     // Falta crear registro de movement
     await stub.putState(userId, JSON.stringify(user));
+
+    // Event
+    let tradeEvent = {
+      userId,
+      missionId,
+      userName: user['name'],
+      movementsPerformed: user['enrolledMissions'][missionIndex]['movementsPerformed']
+    };
+    stub.setEvent("Movement", Buffer.from(JSON.stringify(tradeEvent)));
+    console.log(JSON.stringify(tradeEvent));
   }
 
   async tokensSend(stub, args) {
@@ -333,8 +343,8 @@ var ABstore = class {
     let userBufferFrom = await stub.getState(userIdFrom);
     let userFrom = JSON.parse(userBufferFrom.toString());
     console.log("user::>", userFrom);
-    if(userFrom.tokens<tokens){
-      throw "No tiene suficientes tokens"
+    if (userFrom.tokens < tokens) {
+      throw "No tiene suficientes tokens";
     }
     userFrom.sendTransactions.push(transactionId);
     userFrom.tokens -= tokens;
@@ -377,9 +387,9 @@ var ABstore = class {
 
     // Get the state from the ledger
     let Avalbytes = await stub.getState(A);
-    if (!Avalbytes || Avalbytes=='') {
+    if (!Avalbytes || Avalbytes == "") {
       // jsonResp.error = "Failed to get state for " + A;
-      throw "Failed to get state"
+      throw "Failed to get state";
     }
 
     jsonResp.name = A;
