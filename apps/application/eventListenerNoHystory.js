@@ -7,6 +7,7 @@ const configPath = path.resolve(__dirname, 'nextblockEL.txt');
 const fs = require('fs');
 const aws = require("aws-sdk");
 aws.config.loadFromPath(process.cwd() + "/aws-config.json");
+aws.config.update({region: 'us-west-1'});
 const sns = new aws.SNS();
 
 let paramsPublish = {
