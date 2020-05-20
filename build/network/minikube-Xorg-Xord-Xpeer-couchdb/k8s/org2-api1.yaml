@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: org2-api1
+  # name: orderer-clusterip
+spec:
+  selector:
+    app: org2-api1
+  ports:
+  - port: 3000
+    name: org2-api1
+  type: ClusterIP
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: org2-api1-nodeport
+spec:
+  selector:
+    app: org2-api1
+  ports:
+    - name: org2-api1
+      port: 3000
+      nodePort: 31148
+  type: LoadBalancer
+
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: org2-api1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: org2-api1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: org2-api1
+    spec:
+      # subdomain: example
+      containers:
+        - name: org2-api1
+          # image: busybox:1.31.1
+          # command: [ "sleep", "3600" ]
+          image: le999/org2-api1-marlon:1.0
+          # imagePullPolicy: Never
+          ports:
+            - containerPort: 3000
+              name: web
+          env:
+           - name: LOCAL
+             value: "false"
+          volumeMounts:
+            - name: api-server-wallet
+              mountPath: /usr/src/app/wallet/user3.id
+              subPath: user3.id
+            - name: api-server-con
+              mountPath: /usr/src/app/gateway/connection.json
+              subPath: connection.json
+
+      volumes:
+
+      - name: api-server-wallet
+        configMap:
+          name: org2-api1-wallet
+      - name: api-server-con
+        configMap:
+          name: org2-api1-con

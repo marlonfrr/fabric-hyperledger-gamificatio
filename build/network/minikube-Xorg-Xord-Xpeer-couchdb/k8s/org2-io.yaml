@@ -1,0 +1,52 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: org2-io
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: org2-io
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: org2-io
+    spec:
+      # subdomain: example
+      containers:
+        - name: org2-io
+          # image: busybox:1.31.1
+          # command: [ "sleep", "3600" ]
+          image: le999/org2-io:1.0
+          # imagePullPolicy: Never
+          ports:
+            - containerPort: 3000
+              name: web
+          env:
+            - name: LOCAL
+              value: "false"
+            - name: EVENT
+              value: Movement
+            - name: IO_ENDPOINT
+              value: http://org2-io-endpoint:3000/v1/api/event
+
+          volumeMounts:
+            - name: api-server-wallet
+              mountPath: /usr/src/app/wallet/user3.id
+              subPath: user3.id
+            - name: api-server-con
+              mountPath: /usr/src/app/gateway/connection.json
+              subPath: connection.json
+
+      volumes:
+
+      - name: api-server-wallet
+        configMap:
+          name: org2-io-wallet
+
+      - name: api-server-con
+        configMap:
+          name: org2-io-con

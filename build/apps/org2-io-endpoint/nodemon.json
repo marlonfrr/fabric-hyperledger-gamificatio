@@ -1,0 +1,7 @@
+{
+  "name": "nodemon",
+  "homepage": "http://nodemon.io",
+  "nodemonConfig": {
+    "ignore": ["node_modules/*"]
+  }
+}

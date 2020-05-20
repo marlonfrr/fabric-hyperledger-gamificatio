@@ -1,0 +1,17 @@
+version: '2'
+
+services:
+  cli:
+    container_name: cli
+    image: hyperledger/fabric-ca:1.4.6
+    stdin_open: true
+    tty: true
+    working_dir: /etc/hyperledger/build/
+    user: ${CURRENT_UID}
+    # command: ls
+    volumes:
+      - ../:/etc/hyperledger/
+    extra_hosts:
+      - "ca.example.com:192.168.99.100"
+      - "ca.org1.example.com:192.168.99.100"
+      - "ca.org2.example.com:192.168.99.100"

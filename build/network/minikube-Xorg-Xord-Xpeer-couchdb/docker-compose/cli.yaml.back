@@ -1,0 +1,27 @@
+version: '2'
+
+networks:
+  test:
+
+services:
+  cli:
+    container_name: cli
+    image: hyperledger/fabric-tools:2.0.1
+    stdin_open: true
+    tty: true
+    working_dir: /var/hyperledger/
+    user: ${CURRENT_UID}
+    # command: ls
+    volumes:
+      - ../:/var/hyperledger/
+      - ../../../smartcontracts/:/var/smartcontracts/
+    networks:
+      - test
+    extra_hosts:
+      - "peer0.org1.example.com:192.168.99.100"
+      - "peer1.org1.example.com:192.168.99.100"
+      - "peer0.org2.example.com:192.168.99.100"
+      - "peer1.org2.example.com:192.168.99.100"
+      - "orderer1.example.com:192.168.99.100"
+      - "orderer2.example.com:192.168.99.100"
+      - "orderer3.example.com:192.168.99.100"

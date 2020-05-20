@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ca-orderer
+  # name: orderer-clusterip
+spec:
+  selector:
+    app: ca-orderer
+  ports:
+  - port: 443
+    name: ca-orderer
+  type: ClusterIP
+
+---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: ca-orderer-nodeport
+# spec:
+#   selector:
+#     app: ca-orderer
+#   ports:
+#     - name: ca-orderer
+#       port: 443
+#       nodePort: 443
+#   type: LoadBalancer
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ca-orderer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ca-orderer
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: ca-orderer
+    spec:
+      # subdomain: example
+      containers:
+        - name: ca-orderer
+          # image: busybox:1.31.1
+          # command: [ "sleep", "3600" ]
+          command: ["sh", "-c", "fabric-ca-server start -b admin:adminpw -d"]
+          image: hyperledger/fabric-ca:1.4.6
+          ports:
+            - containerPort: 443
+              name: web
+          env:
+            - name: FABRIC_CA_HOME
+              value: /etc/hyperledger/fabric-ca-server
+            - name: FABRIC_CA_SERVER_CA_NAME
+              value: ca-orderer
+            - name: FABRIC_CA_SERVER_TLS_ENABLED
+              value: "true"
+            - name: FABRIC_CA_SERVER_PORT
+              value: "443"
+
+
+          volumeMounts:
+          - name: orderer-ca
+            mountPath: /etc/hyperledger/fabric-ca-server
+          - name: volume-server-config
+            mountPath: /etc/hyperledger/fabric-ca-server/fabric-ca-server-config.yaml
+            subPath: fabric-ca-server-config.yaml
+
+      volumes:
+        - name: volume-server-config
+          configMap:
+            name: ca-orderer-server-config
+        - name: orderer-ca
+          persistentVolumeClaim:
+            claimName: orderer-ca

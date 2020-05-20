@@ -1,0 +1,49 @@
+version: '2'
+
+# networks:
+#   net_test:
+#     external: true
+
+services:
+  api-server:
+    container_name: api-server
+    image: node:10
+    # image: busybox:1.31.1
+    stdin_open: true  #comment this and the following to run server
+    tty: true
+    working_dir: /var/apps/org1-api1/
+    user: ${CURRENT_UID}
+    command: "npm start"
+    environment:
+      - LOCAL=false
+    volumes:
+      - ./:/var/apps/
+    ports:
+      - "3000:3000"
+    # networks:
+    #   - net_test
+
+    # minikube
+    extra_hosts:
+      - "peer0.org1.example.com:192.168.99.100"
+      - "peer1.org1.example.com:192.168.99.100"
+      - "peer0.org2.example.com:192.168.99.100"
+      - "peer1.org2.example.com:192.168.99.100"
+      - "orderer1.example.com:192.168.99.100"
+      - "orderer2.example.com:192.168.99.100"
+      - "orderer3.example.com:192.168.99.100"
+      - "ca.org1.example.com:192.168.99.100"
+      - "ca.org2.example.com:192.168.99.100"
+      - "ca.example.com:192.168.99.100"
+
+    #kubeadmin
+    # extra_hosts:
+    #   - "peer0.org1.example.com:192.168.50.3"
+    #   - "orderer1.example.com:192.168.50.3"
+    #   - "ca.org1.example.com:192.168.50.3"
+    #   - "ca.example.com:192.168.50.3"
+
+    #azure
+    #extra_hosts:
+    #  - "peer0.org1.example.com:40.71.238.115"
+    #  - "orderer.example.com:52.142.37.143"

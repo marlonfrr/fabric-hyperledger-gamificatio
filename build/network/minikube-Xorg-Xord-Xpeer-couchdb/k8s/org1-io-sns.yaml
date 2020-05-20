@@ -1,0 +1,52 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: org1-io-sns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: org1-io-sns
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: org1-io-sns
+    spec:
+      # subdomain: example
+      containers:
+        - name: org1-io-sns
+          # image: busybox:1.31.1
+          # command: [ "sleep", "3600" ]
+          image: le999/org1-io-sns-marlon:1.0
+          # imagePullPolicy: Never
+          ports:
+            - containerPort: 3000
+              name: web
+          env:
+            - name: LOCAL
+              value: "false"
+            - name: snsAKI
+              value: rep
+            - name: snsSAK
+              value: rep
+
+          volumeMounts:
+            - name: api-server-wallet
+              mountPath: /usr/src/app/wallet/user3.id
+              subPath: user3.id
+            - name: api-server-con
+              mountPath: /usr/src/app/gateway/connection.json
+              subPath: connection.json
+
+      volumes:
+
+      - name: api-server-wallet
+        configMap:
+          name: org1-io-wallet
+
+      - name: api-server-con
+        configMap:
+          name: org1-io-con

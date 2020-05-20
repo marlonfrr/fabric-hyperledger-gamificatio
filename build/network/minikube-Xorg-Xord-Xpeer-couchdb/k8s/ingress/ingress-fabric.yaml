@@ -1,0 +1,74 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-myservicea
+  annotations:
+    # use the shared ingress-nginx
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+spec:
+  rules:
+  - host: ca.example.com
+    http:
+      paths:
+      - backend:
+          serviceName: ca-orderer
+          servicePort: 443
+  - host: ca.org1.example.com
+    http:
+      paths:
+      - backend:
+          serviceName: ca-org1
+          servicePort: 443
+  - host: ca.org2.example.com
+    http:
+      paths:
+      - backend:
+          serviceName: ca-org2
+          servicePort: 443
+
+  - host: peer0.org1.example.com
+    http:
+      paths:
+      - backend:
+          serviceName: peer0-org1
+          servicePort: 443
+  - host: peer1.org1.example.com
+    http:
+      paths:
+      - backend:
+          serviceName: peer1-org1
+          servicePort: 443
+  - host: peer0.org2.example.com
+    http:
+      paths:
+      - backend:
+          serviceName: peer0-org2
+          servicePort: 443
+  - host: peer1.org2.example.com
+    http:
+      paths:
+      - backend:
+          serviceName: peer1-org2
+          servicePort: 443
+
+  - host: orderer1.example.com
+    http:
+      paths:
+      - backend:
+          serviceName: orderer1
+          servicePort: 443
+  - host: orderer2.example.com
+    http:
+      paths:
+      - backend:
+          serviceName: orderer2
+          servicePort: 443
+  - host: orderer3.example.com
+    http:
+      paths:
+      - backend:
+          serviceName: orderer3
+          servicePort: 443
