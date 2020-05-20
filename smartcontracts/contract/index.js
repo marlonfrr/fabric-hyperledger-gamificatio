@@ -317,22 +317,15 @@ var ABstore = class {
     // Falta crear registro de movement
     await stub.putState(userId, JSON.stringify(user));
 
-
-    // let tradeEvent = {
-    //   str: "test"
-    // };
-    // stub.setEvent("Movement", Buffer.from(JSON.stringify(tradeEvent)));
-    // console.log(JSON.stringify(tradeEvent));
-
     //Event
-    // let tradeEvent = {
-    //   userId,
-    //   missionId,
-    //   userName: user['name'],
-    //   movementsPerformed: user['enrolledMissions'][missionIndex]['movementsPerformed']
-    // };
+    let tradeEvent = {
+      userId,
+      missionId,
+      userName: user['name'],
+      movementsPerformed: user['enrolledMissions'][missionIndex]['movementsPerformed']
+    };
 
-    // stub.setEvent("Movement", Buffer.from(JSON.stringify(tradeEvent)));
+    stub.setEvent("Movement", Buffer.from(JSON.stringify(tradeEvent)));
     console.log(JSON.stringify(tradeEvent));
   }
 
