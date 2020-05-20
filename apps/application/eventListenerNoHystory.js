@@ -7,8 +7,8 @@ const configPath = path.resolve(__dirname, 'nextblockEL.txt');
 const fs = require('fs');
 const aws = require("aws-sdk");
 //aws.config.loadFromPath(process.cwd() + "/aws-config.json");
-aws.config.update({region: 'us-east-1', credentials: {accessKeyId: "AKIASI542HEU53GMEZWN",
-secretAccessKey: "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"}});
+aws.config.update({region: 'us-east-1', credentials: {accessKeyId: process.env.snsAKI,
+secretAccessKey: process.env.snsSAK}});
 const sns = new aws.SNS();
 
 let paramsPublish = {
