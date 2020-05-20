@@ -85,12 +85,6 @@ var ABstore = class {
       throw new Error("Incorrect number of arguments. Expecting 2");
     }
 
-    let tradeEvent = {
-      str: "test"
-    };
-    stub.setEvent("Movement", Buffer.from(JSON.stringify(tradeEvent)));
-    console.log(JSON.stringify(tradeEvent));
-
     let A = args[0];
     let B = args[1];
     if (!A || !B) {
@@ -323,15 +317,23 @@ var ABstore = class {
     // Falta crear registro de movement
     await stub.putState(userId, JSON.stringify(user));
 
-    // Event
+
+    // let tradeEvent = {
+    //   str: "test"
+    // };
+    // stub.setEvent("Movement", Buffer.from(JSON.stringify(tradeEvent)));
+    // console.log(JSON.stringify(tradeEvent));
+
+    //Event
     // let tradeEvent = {
     //   userId,
     //   missionId,
     //   userName: user['name'],
     //   movementsPerformed: user['enrolledMissions'][missionIndex]['movementsPerformed']
     // };
+
     // stub.setEvent("Movement", Buffer.from(JSON.stringify(tradeEvent)));
-    // console.log(JSON.stringify(tradeEvent));
+    console.log(JSON.stringify(tradeEvent));
   }
 
   async tokensSend(stub, args) {

@@ -12,7 +12,7 @@ secretAccessKey: process.env.snsSAK}});
 const sns = new aws.SNS();
 
 let paramsPublish = {
-  Message: "blablabalbalabla",
+  Message: "¡Has realizado un nuevo movimiento en gamificat.io!",
   TopicArn: "arn:aws:sns:us-east-1:156625418537:gamificatio-test"
 };
 
@@ -49,7 +49,7 @@ getGateway
           `Block Number: ${blockNumber} Transaction ID: ${transactionId} Status: ${status}`
         );
         event = event.payload.toString();
-        console.log(event);
+        console.log(JSON.parse(event));
         console.log(
           '************************ Start Trade Event *******************************************************'
         );
