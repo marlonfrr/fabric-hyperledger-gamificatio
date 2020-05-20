@@ -6,14 +6,13 @@ const path = require('path');
 const configPath = path.resolve(__dirname, 'nextblockEL.txt');
 const fs = require('fs');
 const aws = require("aws-sdk");
-//aws.config.loadFromPath(process.cwd() + "/aws-config.json");
-aws.config.update({region: 'us-east-1', credentials: {accessKeyId: "AKIASI542HEU53GMEZWN",
-secretAccessKey: "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"}});
+aws.config.loadFromPath(process.cwd() + "/aws-config.json");
+aws.config.update({region: 'us-west-1'});
 const sns = new aws.SNS();
-
+console.log(process.env.snsSAK)
 let paramsPublish = {
   Message: "blablabalbalabla",
-  TopicArn: "arn:aws:sns:us-east-1:156625418537:gamificatio-test"
+  TopicArn: "arn:aws:sns:us-west-1:156625418537:gamificatio-test"
 };
 
 // arn:aws:sns:us-west-1:156625418537:gamificatio-test

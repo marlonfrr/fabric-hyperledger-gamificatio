@@ -17,6 +17,7 @@
     "author": "Hyperledger",
     "license": "Apache-2.0",
     "dependencies": {
+        "aws-sdk": "^2.680.0",
         "cookie-parser": "~1.4.4",
         "cors": "^2.8.5",
         "debug": "~2.6.9",
@@ -29,7 +30,7 @@
         "js-yaml": "^3.12.0",
         "morgan": "~1.9.1",
         "swagger-ui-express": "^4.1.3",
-        "uuid": "^7.0.2"
+        "uuid": "^7.0.3"
     },
     "devDependencies": {
         "chai": "^4.2.0",
