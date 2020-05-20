@@ -11,11 +11,6 @@ aws.config.update({region: 'us-east-1', credentials: {accessKeyId: process.env.s
 secretAccessKey: process.env.snsSAK}});
 const sns = new aws.SNS();
 
-let paramsPublish = {
-  Message: "¡Has realizado un nuevo movimiento en gamificat.io!",
-  TopicArn: "arn:aws:sns:us-east-1:156625418537:gamificatio-test"
-};
-
 // arn:aws:sns:us-west-1:156625418537:gamificatio-test
 
 
@@ -64,6 +59,10 @@ getGateway
         //   console.log(body);
         // });
         // AWS logic
+        let paramsPublish = {
+          Message: `Hola ${event.userName}, has realizado un nuevo movimiento en gamificat.io. Llevas ${event.movementsPerformed} de ${event.movementsRequired}`,
+          TopicArn: "arn:aws:sns:us-east-1:156625418537:gamificatio-test"
+        };
         sns.publish(paramsPublish, function(err, data) {
           if (err) console.log(err); 
           else console.log("::::::::> Valid ",data);

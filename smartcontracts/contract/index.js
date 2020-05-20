@@ -322,6 +322,7 @@ var ABstore = class {
       userId,
       missionId,
       userName: user['name'],
+      movementsRequired: user['enrolledMissions'][missionIndex]['movementsRequired'],
       movementsPerformed: user['enrolledMissions'][missionIndex]['movementsPerformed']
     };
 
